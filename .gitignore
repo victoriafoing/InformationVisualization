@@ -1,0 +1,6 @@
+__pycache__
+.venv
+.vscode
+
+app/data/*.csv
+app/data/*.tsv
