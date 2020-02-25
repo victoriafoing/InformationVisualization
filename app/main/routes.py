@@ -3,12 +3,18 @@ import pandas as pd
 
 from app import data
 from . import main
+from .dataloader import load_file, load_fake_data
 
 
 @main.route('/', methods=['GET'])
 def index():
     return render_template("home.html")
 
+
+@main.route("/data", methods=['GET'])
+def get_data():
+    df = load_fake_data()
+    return render_template("home.html",df=df.to_json())
 
 # @main.route('/d3', methods=['GET', 'POST'])
 # def d3():

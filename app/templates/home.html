@@ -13,10 +13,13 @@
 
 <div class="mt-3" id="barchart"></div>
 
-
+<script type="text/javascript" charset="utf-8">
+	var df = {{ df | tojson }};
+	console.log(df)
+</script>
 <!-- Example -->
 {# <script type="text/javascript">
-	var data = {{ data |safe }}; 
+	var data = {{ data |safe }};
 	var selected_area = {{ selected_area_name |tojson }};
 </script>
 

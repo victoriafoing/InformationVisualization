@@ -4,3 +4,4 @@ __pycache__
 .idea/*
 app/data/*.csv
 app/data/*.tsv
+start_app.sh
