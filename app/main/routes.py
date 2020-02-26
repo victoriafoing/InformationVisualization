@@ -3,7 +3,7 @@ import pandas as pd
 
 from app import data
 from . import main
-from .dataloader import load_file, load_fake_data
+from .dataloader import load_csv, load_fake_data
 
 
 @main.route('/', methods=['GET'])
