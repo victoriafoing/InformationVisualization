@@ -37,6 +37,7 @@ def load_file(file, lines=None):
     new_cols = df["PROPERTIES"].str.split(",", n=len(features), expand=True)
     for i, feat in enumerate(features):
         df[feat] = new_cols[i]
+    df = df.drop(columns='PROPERTIES')
 
     return df
 
