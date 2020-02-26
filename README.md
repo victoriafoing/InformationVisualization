@@ -6,7 +6,7 @@ You can automatically install all the requirements by running: `pip install -r r
 
 It is recommended to first create a virtual environment by running: `python3.8 -m venv --prompt infovis .venv` and to activate it by running `. .venv/bin/activate` or `source .venv/bin/activate` (Linux syntax)
 
-You need to put the reddit `csv` and `tsv` files in `app/data/`
+You need to put the reddit `csv` and `tsv` files in `app/data/` followed by running `python preprocesser.py`
 
 ## Examples and Template
 
