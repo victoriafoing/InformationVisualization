@@ -42,6 +42,21 @@ def transform_properties(infile, outfile):
     df.to_csv(outfile, sep='\t')
 
 
+def process_embedding(infile, outfile):
+    with open(infile) as infile:
+        lines = infile.readlines()
+
+    for i, line in enumerate(lines):
+        line = line[:-1].split(',')
+        line = f"{line[0]},{' '.join(line[1:])}"
+        lines[i] = line
+
+    with open(outfile, 'w') as outfile:
+        outfile.write('SUBREDDIT_ID,EMBEDDING\n')
+        for line in lines:
+            outfile.write(f'{line}\n')
+
+
 if __name__ == '__main__':
     import os.path
     if not os.path.exists('reddit-body.tsv'):
@@ -50,3 +65,6 @@ if __name__ == '__main__':
     if not os.path.exists('reddit-title.tsv'):
         transform_properties('soc-redditHyperlinks-title.tsv',
                              'reddit-title.tsv')
+    if not os.path.exists('reddit-embedding.csv'):
+        process_embedding('web-redditEmbeddings-subreddits.csv',
+                          'reddit-embedding.csv')
