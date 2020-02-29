@@ -93,10 +93,11 @@
               .attr("class", "bar")
               .style("fill", "steelblue")
               .on("mouseover", function(d) {
+                    console.log(d);
                     div.transition()
                         .duration(200)
                         .style("opacity", .9);
-                    div	.html("<h4> tooltip <h4>")
+                    div	.html("<h4>" + d.time + "<h4><h4>" + d.sentiment + "<h4>")
                         .style("left", (d3.event.pageX) + "px")
                         .style("top", (d3.event.pageY - 28) + "px");
                     })

@@ -21,6 +21,7 @@ def load_csv(file: str):
 
     df['TIMESTAMP'] = pd.to_datetime(df['TIMESTAMP'])
     return df
+
 def get_timeline_data(df: pd.DataFrame):
     result = df.groupby([df['TIMESTAMP'].dt.year, df['TIMESTAMP'].dt.month])['LINK_SENTIMENT'].sum().sort_values()
     return [{"time": key, "sentiment": value} for key, value in result.items() if value > 100]
@@ -30,6 +31,19 @@ def load_fake_data():
     df = pd.DataFrame(data=d)
     return df
 
+def filter_year(year, df: pd.DataFrame):
+    return df[df['TIMESTAMP'].dt.year == year]
+
+def filter_month(month, df: pd.DataFrame):
+    return df[df['TIMESTAMP'].dt.month == month]
+
+def calc_stats(df):
+    mean_sentiment = df['LINK_SENTIMENT'].mean()
+    std_sentiment = df['LINK_SENTIMENT'].std()
+    return mean_sentiment, std_sentiment
+
+def calc_stats_for_month_year(df, month, year):
+    return calc_stats(filter_year(year,filter_month(month,df)))
 
 if __name__ == '__main__':
 
