@@ -3,18 +3,20 @@ import pandas as pd
 
 from app import data
 from . import main
-from .dataloader import load_csv, load_fake_data
+from .dataloader import load_csv, load_fake_data, get_timeline_data
 
+import json
 
 @main.route('/', methods=['GET'])
 def index():
     return render_template("home.html")
 
 
+
 @main.route("/data", methods=['GET'])
 def get_data():
-    df = load_fake_data()
-    return render_template("home.html",df=df.to_json())
+    data = get_timeline_data(load_csv("./app/data/reddit-body.tsv"))
+    return json.dumps(data)
 
 # @main.route('/d3', methods=['GET', 'POST'])
 # def d3():
