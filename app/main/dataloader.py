@@ -38,12 +38,37 @@ def filter_month(month, df: pd.DataFrame):
     return df[df['TIMESTAMP'].dt.month == month]
 
 def calc_stats(df):
-    mean_sentiment = df['LINK_SENTIMENT'].mean()
-    std_sentiment = df['LINK_SENTIMENT'].std()
-    return mean_sentiment, std_sentiment
+    result = {
+        "mean" : df['LINK_SENTIMENT'].mean(),
+        "std" : df['LINK_SENTIMENT'].std()
+    }
+    return result
 
 def calc_stats_for_month_year(df, month, year):
-    return calc_stats(filter_year(year,filter_month(month,df)))
+    filtered_df = filter_year(int(year),filter_month(int(month),df))
+    if filtered_df.size > 0:
+        return calc_stats(filtered_df)
+    else:
+        return {
+        "mean" : 0.0,
+        "std" : 0.0
+    }
+
+def get_most_hated_loved_subreddits_by_month_year(df, month, year):
+    filtered_df = filter_year(int(year), filter_month(int(month), df))
+    grouped = list(filtered_df.groupby('TARGET_SUBREDDIT')['LINK_SENTIMENT'].sum().sort_values().items())
+    most_hated = grouped[0]
+    most_loved = grouped[-1]
+    return {
+        "hated" : {
+            "name": most_hated[0],
+            "count" : most_hated[1]
+        },
+        "loved": {
+            "name": most_loved[0],
+            "count": most_loved[1]
+        }
+    }
 
 if __name__ == '__main__':
 

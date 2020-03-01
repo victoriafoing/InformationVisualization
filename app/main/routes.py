@@ -3,7 +3,8 @@ import pandas as pd
 
 from app import data
 from . import main
-from .dataloader import load_csv, load_fake_data, get_timeline_data, calc_stats_for_month_year
+from .dataloader import load_csv, load_fake_data, get_timeline_data, calc_stats_for_month_year, \
+    get_most_hated_loved_subreddits_by_month_year
 
 import json
 
@@ -15,6 +16,11 @@ def index():
 @main.route("/data/<year>/<month>", methods=['GET'])
 def get_data_by_month_year(month, year):
     data = calc_stats_for_month_year(current_app.df, month, year)
+    return json.dumps(data)
+
+@main.route("/top/<year>/<month>", methods=['GET'])
+def get_top_subreddits_by_month_year(month, year):
+    data = get_most_hated_loved_subreddits_by_month_year(current_app.df, month, year)
     return json.dumps(data)
 
 @main.route("/data", methods=['GET'])
