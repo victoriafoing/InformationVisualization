@@ -19,6 +19,35 @@
 		p, .txt {  text-align: justify;
   			 text-justify: inter-word;
   			}
+        .bar:hover{
+            fill: brown;
+        }
+
+        .axis {
+          font: 10px sans-serif;
+        }
+
+        .axis path,
+        .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+        }
+
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 240px;
+            height: 120px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
 	</style>
 </head>
 <body>
@@ -33,4 +62,8 @@
 		</div>
 	</main>
 </body>
+
+<!-- Example of Reddit Card. Here I want to sample from our set to display an example. Wolf -->
+<blockquote class="reddit-card" data-card-created="1582734801"><a href="https://www.reddit.com/r/conspiracy/comments/34wxgc/come_look_at_all_the_brainwashed_idiots_in/">Come look at all the brainwashed idiots in r/Documentaries</a> from <a href="http://www.reddit.com/r/conspiracy">r/conspiracy</a></blockquote>
+<script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
 </html>
