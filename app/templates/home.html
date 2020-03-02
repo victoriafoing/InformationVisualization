@@ -13,10 +13,13 @@
 
 <div class="mt-3" id="barchart"></div>
 
-{#<script type="text/javascript" charset="utf-8">#}
-{#	var df = {{ df | tojson }};#}
-{#	console.log(df)#}
-{#</script>#}
+{% if df %}
+<script type="text/javascript" charset="utf-8">
+		var df = {{ df | safe }};
+		console.log(df);
+</script>
+{% endif %}
+
 <!-- Example -->
 {# <script type="text/javascript">
 	var data = {{ data |safe }};
