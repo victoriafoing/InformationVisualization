@@ -4,7 +4,7 @@ import pandas as pd
 def load_csv(file: str):
     ext = file[-3:]
     if ext == 'tsv':
-        df =  pd.read_csv(file, delimiter='\t', index_col=0)
+        df = pd.read_csv(file, delimiter='\t', index_col=0)
 
     elif ext == 'csv':
         df = pd.read_csv(file)
@@ -21,9 +21,16 @@ def load_csv(file: str):
 
     df['TIMESTAMP'] = pd.to_datetime(df['TIMESTAMP'])
     return df
+
+
 def get_timeline_data(df: pd.DataFrame):
-    result = df.groupby([df['TIMESTAMP'].dt.year, df['TIMESTAMP'].dt.month])['LINK_SENTIMENT'].sum().sort_values()
-    return [{"time": key, "sentiment": value} for key, value in result.items() if value > 100]
+    result = df.groupby([df['TIMESTAMP'].dt.year, df['TIMESTAMP'].dt.month
+                         ])['LINK_SENTIMENT'].sum().sort_values()
+    return [{
+        "time": key,
+        "sentiment": value
+    } for key, value in result.items() if value > 100]
+
 
 def load_fake_data():
     d = {'col1': [1, 2], 'col2': [3, 4]}
