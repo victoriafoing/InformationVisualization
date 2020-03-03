@@ -42,6 +42,19 @@ def transform_properties(infile, outfile):
     df.to_csv(outfile, sep='\t')
 
 
+def filter_properties(infile, outfile, other_columns=None):
+    df = pd.read_csv(infile, sep='\t', index_col=0)
+
+    columns = [
+        'SOURCE_SUBREDDIT', 'TARGET_SUBREDDIT', 'POST_ID', 'TIMESTAMP',
+        'LINK_SENTIMENT'
+    ]
+    if other_columns is not None:
+        columns.extend(other_columns)
+
+    df[columns].to_csv(outfile, sep='\t')
+
+
 def process_embedding(infile, outfile):
     with open(infile) as infile:
         lines = infile.readlines()
@@ -59,12 +72,21 @@ def process_embedding(infile, outfile):
 
 if __name__ == '__main__':
     import os.path
+
     if not os.path.exists('reddit-body.tsv'):
         transform_properties('soc-redditHyperlinks-body.tsv',
                              'reddit-body.tsv')
+
+    if not os.path.exists('reddit-body-filtered.tsv'):
+        filter_properties('reddit-body.tsv', 'reddit-body-filtered.tsv')
+
     if not os.path.exists('reddit-title.tsv'):
         transform_properties('soc-redditHyperlinks-title.tsv',
                              'reddit-title.tsv')
+
+    if not os.path.exists('reddit-title-filtered.tsv'):
+        filter_properties('reddit-title.tsv', 'reddit-title-filtered.tsv')
+
     if not os.path.exists('reddit-embedding.csv'):
         process_embedding('web-redditEmbeddings-subreddits.csv',
                           'reddit-embedding.csv')
