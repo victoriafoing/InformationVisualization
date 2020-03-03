@@ -8,6 +8,7 @@ from .dataloader import load_csv, load_fake_data, get_timeline_data, calc_stats_
 
 import json
 
+
 @main.route('/', methods=['GET'])
 def index():
     return render_template("home.html")
@@ -27,6 +28,7 @@ def get_top_subreddits_by_month_year(month, year):
 def get_data():
     data = get_timeline_data(current_app.df)
     return json.dumps(data)
+
 
 # @main.route('/d3', methods=['GET', 'POST'])
 # def d3():
