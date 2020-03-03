@@ -5,3 +5,6 @@ __pycache__
 app/data/*.csv
 app/data/*.tsv
 start_app.sh
+*.csv
+*.tsv
+*.ipynb

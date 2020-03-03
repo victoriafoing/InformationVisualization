@@ -28,115 +28,231 @@
         console.log('Websocket connected!');
     });
 
-    var fetch_url = '/data';
+    // var fetch_url = '/data';
+	// fetch(fetch_url)
+    //     .then(function (response) {
+    //         return response.json();
+    //     })
+    //     .then((data) => {
+    //         console.log(data);
+    //         var margin = {top: 20, right: 20, bottom: 70, left: 200},
+    //             width = 2000 ,
+    //             height = 500;
+
+    //         var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+    //         var y = d3.scale.linear().range([height, 0]);
+    //         var xAxis = d3.svg.axis()
+    //                     .scale(x)
+    //                     .orient("bottom")
+    //                     .ticks(10);
+
+
+    //         var yAxis = d3.svg.axis()
+    //             .scale(y)
+    //             .orient("left")
+    //             .ticks(10);
+
+    //         var svg = d3.select("body").append("svg")
+    //             .attr("width", width + margin.left + margin.right)
+    //             .attr("height", height + margin.top + margin.bottom)
+    //             .append("g")
+    //             .attr("transform",
+    //                   "translate(" + margin.left + "," + margin.top + ")");
+
+    //       x.domain(data.map(function(d) { return d.time; }));
+    //       y.domain([0, d3.max(data, function(d) { return d.sentiment; })]);
+
+    //       svg.append("g")
+    //           .attr("class", "x axis")
+    //           .attr("transform", "translate(0," + height + ")")
+    //           .call(xAxis)
+    //         .selectAll("text")
+    //           .style("text-anchor", "end")
+    //           .attr("dx", "-.8em")
+    //           .attr("dy", "-.55em")
+    //           .attr("transform", "rotate(-90)" );
+
+    //       svg.append("g")
+    //           .attr("class", "y axis")
+    //           .call(yAxis)
+    //         .append("text")
+    //           .attr("transform", "rotate(-90)")
+    //           .attr("y", 6)
+    //           .attr("dy", ".71em")
+    //           .style("text-anchor", "end")
+    //           .text("Total sentiment");
+
+    //         // Define the div for the tooltip
+    //         var div = d3.select("body").append("div")
+    //                     .attr("class", "tooltip")
+    //                     .style("opacity", 0);
+
+    //       svg.selectAll("bar")
+    //           .data(data)
+    //           .enter().append("rect")
+    //           .attr("class", "bar")
+    //           .style("fill", "steelblue")
+    //           .on("mouseover", function(d) {
+    //               div.style("left", (d3.event.pageX) + "px")
+    //                  .style("top", (d3.event.pageY - 28) + "px");
+    //               var fetch_url = '/data/' + d.time[0] + "/" + d.time[1];
+    //               fetch(fetch_url)
+    //                   .then(function (response) {
+    //                       return response.json();
+    //                   })
+    //                   .then((data) => {
+    //                       console.log(data);
+    //                       div.transition(data)
+    //                           .duration(200)
+    //                           .style("opacity", .9);
+    //                       div.html(
+    //                           "<h4> Mean sentiment:" + Math.round(data.mean * 100) / 100 + "<h4>" +
+    //                           "<h4>Standard dev:" +    Math.round(data.std * 100) / 100 + "<h4>"
+    //                       )
+    //                   });
+
+    //               var fetch_url = '/top/' + d.time[0] + "/" + d.time[1];
+    //               fetch(fetch_url)
+    //                   .then(function (response) {
+    //                       return response.json();
+    //                   })
+    //                   .then((data) => {
+    //                       console.log(data);
+    //                       div.html(
+    //                           "<h4><p style=\"color:red; font: 20px sans-serif;\"> Most hated</p>: " + data.hated.name  +
+    //                           "<p style=\"color:green; font: 20px sans-serif;\"> Most loved</p>: " + data.loved.name+"</h4>"
+    //                       )
+    //                   });
+    //           })
+    //           .on("mouseout", function(d) {
+    //                 div.transition()
+    //                     .duration(500)
+    //                     .style("opacity", 0);
+    //           })
+    //           .attr("x", function(d) { return x(d.time); })
+    //           .attr("width", x.rangeBand())
+    //           .attr("y", function(d) { return y(d.sentiment); })
+    //           .attr("height", function(d) {
+    //                 return height - y(d.sentiment)
+    //           });
+    //     });
+
+    var fetch_url = '/top/' + '2017' + '/' + '1';
 	fetch(fetch_url)
         .then(function (response) {
             return response.json();
         })
         .then((data) => {
-            console.log(data);
-            var margin = {top: 20, right: 20, bottom: 70, left: 200},
-                width = 2000 ,
-                height = 500;
+            console.log("here")
+            console.log(data.names)
+            var labelArea = 160;
+            var chart,
+                width = 400,
+                bar_height = 20,
+                height = bar_height * 200;
+            var rightOffset = width + labelArea;
 
-            var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+            var lCol = "infant.mortality";
+            var rCol = "gdp";
+            var xFrom = d3.scale.linear()
+                    .range([0, width]);
+            var xTo = d3.scale.linear()
+                    .range([0, width]);
+            var y = d3.scale.ordinal()
+                    .rangeBands([20, height]);
 
-            var y = d3.scale.linear().range([height, 0]);
-            var xAxis = d3.svg.axis()
-                        .scale(x)
-                        .orient("bottom")
-                        .ticks(10);
+            function render(data) {
+                var chart = d3.select("body")
+                        .append('svg')
+                        .attr('class', 'chart')
+                        .attr('width', labelArea + width + width)
+                        .attr('height', height);
+
+                xFrom.domain(d3.extent(data, function (d) {
+                    return d[lCol];
+                }));
+                xTo.domain(d3.extent(data, function (d) {
+                    return d[rCol];
+                }));
+
+                y.domain(data.map(function (d) {
+                    return d.countries;
+                }));
+
+                var yPosByIndex = function (d) {
+                    return y(d.countries);
+                };
+                chart.selectAll("rect.left")
+                        .data(data)
+                        .enter().append("rect")
+                        .attr("x", function (d) {
+                            return width - xFrom(d[lCol]);
+                        })
+                        .attr("y", yPosByIndex)
+                        .attr("class", "left")
+                        .attr("width", function (d) {
+                            return xFrom(d[lCol]);
+                        })
+                        .attr("height", y.rangeBand());
+                chart.selectAll("text.leftscore")
+                        .data(data)
+                        .enter().append("text")
+                        .attr("x", function (d) {
+                            return width - xFrom(d[lCol])-40;
+                        })
+                        .attr("y", function (d) {
+                            return y(d.countries) + y.rangeBand() / 2;
+                        })
+                        .attr("dx", "20")
+                        .attr("dy", ".36em")
+                        .attr("text-anchor", "end")
+                        .attr('class', 'leftscore')
+                        .text(function(d){return d[lCol];});
+                chart.selectAll("text.name")
+                        .data(data)
+                        .enter().append("text")
+                        .attr("x", (labelArea / 2) + width)
+                        .attr("y", function (d) {
+                            return y(d.countries) + y.rangeBand() / 2;
+                        })
+                        .attr("dy", ".20em")
+                        .attr("text-anchor", "middle")
+                        .attr('class', 'name')
+                        .text(function(d){return d.countries;});
+
+                chart.selectAll("rect.right")
+                        .data(data)
+                        .enter().append("rect")
+                        .attr("x", rightOffset)
+                        .attr("y", yPosByIndex)
+                        .attr("class", "right")
+                        .attr("width", function (d) {
+                            return xTo(d[rCol]);
+                        })
+                        .attr("height", y.rangeBand());
+                chart.selectAll("text.score")
+                        .data(data)
+                        .enter().append("text")
+                        .attr("x", function (d) {
+                            return xTo(d[rCol]) + rightOffset+40;
+                        })
+                        .attr("y", function (d) {
+                            return y(d.countries) + y.rangeBand() / 2;
+                        })
+                        .attr("dx", -5)
+                        .attr("dy", ".36em")
+                        .attr("text-anchor", "end")
+                        .attr('class', 'score')
+                        .text(function(d){return d[rCol];});
+                chart.append("text").attr("x",width/3).attr("y", 10).attr("class","title").text("Infant Mortality");
+                chart.append("text").attr("x",width/3+rightOffset).attr("y", 10).attr("class","title").text("GDP");
+                chart.append("text").attr("x",width+labelArea/3).attr("y", 10).attr("class","title").text("Countries");
 
 
-            var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left")
-                .ticks(10);
+            }
 
-            var svg = d3.select("body").append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform",
-                      "translate(" + margin.left + "," + margin.top + ")");
-
-          x.domain(data.map(function(d) { return d.time; }));
-          y.domain([0, d3.max(data, function(d) { return d.sentiment; })]);
-
-          svg.append("g")
-              .attr("class", "x axis")
-              .attr("transform", "translate(0," + height + ")")
-              .call(xAxis)
-            .selectAll("text")
-              .style("text-anchor", "end")
-              .attr("dx", "-.8em")
-              .attr("dy", "-.55em")
-              .attr("transform", "rotate(-90)" );
-
-          svg.append("g")
-              .attr("class", "y axis")
-              .call(yAxis)
-            .append("text")
-              .attr("transform", "rotate(-90)")
-              .attr("y", 6)
-              .attr("dy", ".71em")
-              .style("text-anchor", "end")
-              .text("Total sentiment");
-
-            // Define the div for the tooltip
-            var div = d3.select("body").append("div")
-                        .attr("class", "tooltip")
-                        .style("opacity", 0);
-
-          svg.selectAll("bar")
-              .data(data)
-              .enter().append("rect")
-              .attr("class", "bar")
-              .style("fill", "steelblue")
-              .on("mouseover", function(d) {
-                  div.style("left", (d3.event.pageX) + "px")
-                     .style("top", (d3.event.pageY - 28) + "px");
-                  var fetch_url = '/data/' + d.time[0] + "/" + d.time[1];
-                  fetch(fetch_url)
-                      .then(function (response) {
-                          return response.json();
-                      })
-                      .then((data) => {
-                          console.log(data);
-                          div.transition(data)
-                              .duration(200)
-                              .style("opacity", .9);
-                          div.html(
-                              "<h4> Mean sentiment:" + Math.round(data.mean * 100) / 100 + "<h4>" +
-                              "<h4>Standard dev:" +    Math.round(data.std * 100) / 100 + "<h4>"
-                          )
-                      });
-
-                  var fetch_url = '/top/' + d.time[0] + "/" + d.time[1];
-                  fetch(fetch_url)
-                      .then(function (response) {
-                          return response.json();
-                      })
-                      .then((data) => {
-                          console.log(data);
-                          div.html(
-                              "<h4><p style=\"color:red; font: 20px sans-serif;\"> Most hated</p>: " + data.hated.name  +
-                              "<p style=\"color:green; font: 20px sans-serif;\"> Most loved</p>: " + data.loved.name+"</h4>"
-                          )
-                      });
-              })
-              .on("mouseout", function(d) {
-                    div.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-              })
-              .attr("x", function(d) { return x(d.time); })
-              .attr("width", x.rangeBand())
-              .attr("y", function(d) { return y(d.sentiment); })
-              .attr("height", function(d) {
-                    return height - y(d.sentiment)
-              });
-        });
+        })
 </script>
 <!-- Example -->
 {# <script type="text/javascript">

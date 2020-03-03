@@ -60,6 +60,55 @@ def calc_stats_for_month_year(df, month, year):
         "mean" : 0.0,
         "std" : 0.0
     }
+    
+# def get_top_5(df: pd.Dataframe, month: int, sent: int, is_tar: bool):
+#     '''
+#     :param sent: 1 for positive, -1 for negative sentiment.
+#     :param is_tar: True if you want the Target or False for the Source to be calculated.
+#     '''
+#     # TODO how to get the starting month?
+#     old_ts = datetime.strptime(df.iloc[0,3], fmt)
+#     td_max = 2629743
+#     td = 0
+#     store = defaultdict(int)
+#     if istar:
+#         idx = 1
+#     else:
+#         idx = 0
+#     while td < td_max:
+#         for tpl in df.itertuples(index=False):
+#             if tpl[4] == sent:
+#                 store[tpl[idx]] += 1
+#             new_ts = datetime.strptime(tpl[3], fmt)
+#             td = new_ts - old_ts
+#             td = td.total_seconds()
+#     df_src = pd.DataFrame(store.items(), columns=['Sr', 'Sent_count'])
+#     return df_src.nlargest(5, 'Sent_count')
+
+def get_top_5(df, month, year, sent: bool, is_tar: bool, n = 5):
+    '''
+    :param sent: True for positive, False for negative sentiment
+    :param is_tar: 
+    '''
+    if sent:
+        df = df[df['LINK_SENTIMENT'] > 0]
+    else:
+        df = df[df['LINK_SENTIMENT'] < 0]
+        df['LINK_SENTIMENT'] = df['LINK_SENTIMENT']*-1
+
+    filtered_df = filter_year(int(year), filter_month(int(month), df))
+    
+    if is_tar:
+        direction = 'TARGET_SUBREDDIT'
+    else:
+        direction = 'SOURCE_SUBREDDIT'
+
+    grouped = list(filtered_df.groupby(direction)['LINK_SENTIMENT'].sum().sort_values().items())
+    top = grouped[-n:]
+    return {
+        "names": [ele[0] for ele in top], # lol,the_donald,etc
+        "count" : [ele[1] for ele in top] # 150, 112, etc
+    }
 
 def get_most_hated_loved_subreddits_by_month_year(df, month, year):
     filtered_df = filter_year(int(year), filter_month(int(month), df))
