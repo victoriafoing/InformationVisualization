@@ -23,6 +23,7 @@ def load_csv(file: str):
     return df
 
 
+
 def get_timeline_data(df: pd.DataFrame):
     result = df.groupby([df['TIMESTAMP'].dt.year, df['TIMESTAMP'].dt.month
                          ])['LINK_SENTIMENT'].sum().sort_values()
@@ -37,6 +38,44 @@ def load_fake_data():
     df = pd.DataFrame(data=d)
     return df
 
+def filter_year(year, df: pd.DataFrame):
+    return df[df['TIMESTAMP'].dt.year == year]
+
+def filter_month(month, df: pd.DataFrame):
+    return df[df['TIMESTAMP'].dt.month == month]
+
+def calc_stats(df):
+    result = {
+        "mean" : df['LINK_SENTIMENT'].mean(),
+        "std" : df['LINK_SENTIMENT'].std()
+    }
+    return result
+
+def calc_stats_for_month_year(df, month, year):
+    filtered_df = filter_year(int(year),filter_month(int(month),df))
+    if filtered_df.size > 0:
+        return calc_stats(filtered_df)
+    else:
+        return {
+        "mean" : 0.0,
+        "std" : 0.0
+    }
+
+def get_most_hated_loved_subreddits_by_month_year(df, month, year):
+    filtered_df = filter_year(int(year), filter_month(int(month), df))
+    grouped = list(filtered_df.groupby('TARGET_SUBREDDIT')['LINK_SENTIMENT'].sum().sort_values().items())
+    most_hated = grouped[0]
+    most_loved = grouped[-1]
+    return {
+        "hated" : {
+            "name": most_hated[0],
+            "count" : most_hated[1]
+        },
+        "loved": {
+            "name": most_loved[0],
+            "count": most_loved[1]
+        }
+    }
 
 if __name__ == '__main__':
 
