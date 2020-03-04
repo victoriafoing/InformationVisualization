@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def transform_properties(infile, outfile):
+def transform_properties(infile: str, outfile: str) -> None:
     df = pd.read_csv(infile, sep='\t')
     features = [
         'Number of characters',
@@ -42,7 +42,7 @@ def transform_properties(infile, outfile):
     df.to_csv(outfile, sep='\t')
 
 
-def filter_properties(infile, outfile, other_columns=None):
+def filter_properties(infile: str, outfile: str, other_columns=None) -> None:
     df = pd.read_csv(infile, sep='\t', index_col=0)
 
     columns = [
@@ -55,7 +55,7 @@ def filter_properties(infile, outfile, other_columns=None):
     df[columns].to_csv(outfile, sep='\t')
 
 
-def process_embeddings(infile, outfile):
+def process_embeddings(infile: str, outfile: str) -> None:
     with open(infile) as infile:
         lines = infile.readlines()
 
@@ -70,7 +70,7 @@ def process_embeddings(infile, outfile):
             outfile.write(f'{line}\n')
 
 
-def filter_embeddings(infile, outfile, n=250):
+def filter_embeddings(infile: str, outfile: str, n=250) -> None:
     df = pd.read_csv(infile, index_col='SUBREDDIT_ID')
     most_active = most_active_sr('reddit-body-filtered.tsv',
                                  'reddit-title-filtered.tsv', n)
