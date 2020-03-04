@@ -55,7 +55,7 @@ def filter_properties(infile, outfile, other_columns=None):
     df[columns].to_csv(outfile, sep='\t')
 
 
-def process_embedding(infile, outfile):
+def process_embeddings(infile, outfile):
     with open(infile) as infile:
         lines = infile.readlines()
 
@@ -70,8 +70,17 @@ def process_embedding(infile, outfile):
             outfile.write(f'{line}\n')
 
 
+def filter_embeddings(infile, outfile, n=250):
+    df = pd.read_csv(infile, index_col='SUBREDDIT_ID')
+    most_active = most_active_sr('reddit-body-filtered.tsv',
+                                 'reddit-title-filtered.tsv', n)
+    df.loc[most_active].to_csv(outfile)
+
+
 if __name__ == '__main__':
     import os.path
+
+    from utils import most_active_sr
 
     if not os.path.exists('reddit-body.tsv'):
         transform_properties('soc-redditHyperlinks-body.tsv',
@@ -88,5 +97,9 @@ if __name__ == '__main__':
         filter_properties('reddit-title.tsv', 'reddit-title-filtered.tsv')
 
     if not os.path.exists('reddit-embedding.csv'):
-        process_embedding('web-redditEmbeddings-subreddits.csv',
-                          'reddit-embedding.csv')
+        process_embeddings('web-redditEmbeddings-subreddits.csv',
+                           'reddit-embedding.csv')
+
+    if not os.path.exists('reddit-embedding-filtered.csv'):
+        filter_embeddings('reddit-embedding.csv',
+                          'reddit-embedding-filtered.csv')
