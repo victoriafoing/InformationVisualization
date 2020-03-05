@@ -43,7 +43,7 @@ def dim_reduct(embedding_df: Union[str, pd.DataFrame],
 
     embeddings = {}
     for name, proj in zip(names, array):
-        embeddings[name] = list(proj)
+        embeddings[name] = list(map(float, proj))
 
     return embeddings
 
@@ -52,3 +52,6 @@ if __name__ == '__main__':
     projections = dim_reduct('../data/reddit-embedding-filtered.csv')
     for name, proj in projections.items():
         print(name, proj)
+    
+    # import json
+    # print(json.dumps(projections))
