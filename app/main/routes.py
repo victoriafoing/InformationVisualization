@@ -5,8 +5,13 @@ from app import data
 from . import main
 from .dataloader import load_csv, load_fake_data, get_timeline_data, calc_stats_for_month_year, \
     get_most_hated_loved_subreddits_by_month_year, get_top_5
+from .dim_reduction import dim_reduct
 
 import json
+
+# Initialization
+embeddings = dim_reduct('app/data/reddit-embedding-filtered.csv')
+embeddings = json.dumps(embeddings)
 
 
 @main.route('/', methods=['GET'])
@@ -19,15 +24,22 @@ def get_data_by_month_year(month, year):
     data = calc_stats_for_month_year(current_app.df, month, year)
     return json.dumps(data)
 
+
 @main.route("/top/<year>/<month>", methods=['GET'])
 def get_top_subreddits_by_month_year(month, year):
     data = get_top_5(current_app.df, month, year, False, False)
     return json.dumps(data)
 
+
 @main.route("/data", methods=['GET'])
 def get_data():
     data = get_timeline_data(current_app.df)
     return json.dumps(data)
+
+
+@main.route("/embeddings", methods=['GET'])
+def get_embeddings():
+    return embeddings
 
 
 # @main.route('/d3', methods=['GET', 'POST'])
