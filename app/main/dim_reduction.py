@@ -49,6 +49,6 @@ def dim_reduct(embedding_df: Union[str, pd.DataFrame],
 
 
 if __name__ == '__main__':
-    embeddings = dim_reduct('../data/reddit-embedding-filtered.csv')
-    print(embeddings)
-    pass
+    projections = dim_reduct('../data/reddit-embedding-filtered.csv')
+    for name, proj in projections.items():
+        print(name, proj)
