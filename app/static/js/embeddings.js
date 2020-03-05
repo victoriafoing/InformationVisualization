@@ -20,6 +20,7 @@ async function draw_embeddings(width, height) {
     // Computing scale
     let xs = [];
     let ys = [];
+    let margin = 0.1;
 
     embeddings.forEach(emb => {
         xs.push(emb[1]);
@@ -28,11 +29,11 @@ async function draw_embeddings(width, height) {
 
     let x = d3.scaleLinear()
         .domain([Math.min(...xs), Math.max(...xs)])
-        .range([0, width]);
+        .range([margin * width, (1 - margin) * width]);
 
     let y = d3.scaleLinear()
         .domain([Math.min(...ys), Math.max(...ys)])
-        .range([height, 0]);
+        .range([(1 - margin) * height, margin * height]);
 
 
     // Add nodes
