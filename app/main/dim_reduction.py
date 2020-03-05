@@ -41,9 +41,10 @@ def dim_reduct(embedding_df: Union[str, pd.DataFrame],
     if timing:
         print(f'Projection took {round(time.time() - start, 1)}s\n')
 
-    embeddings = {}
+    embeddings = []
     for name, proj in zip(names, array):
-        embeddings[name] = list(map(float, proj))
+        proj = list(map(float, proj))
+        embeddings.append((name, proj[0], proj[1]))
 
     return embeddings
 
