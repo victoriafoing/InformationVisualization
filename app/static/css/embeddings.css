@@ -1,0 +1,10 @@
+.embedding-node {
+    fill: #FF4500;
+    fill-opacity: 33%;
+    transition: fill-opacity 250ms;
+}
+
+.embedding-node:hover {
+    fill-opacity: 100%;
+    transition: fill-opacity 250ms;
+}

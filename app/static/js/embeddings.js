@@ -41,10 +41,11 @@ async function draw_embeddings(width, height) {
         .data(embeddings)
         .enter()
         .append("circle")
+        .attr("class", "embedding-node")
         .attr("cx", d => x(d[1]))
         .attr("cy", d => y(d[2]))
-        .attr("r", 4);
+        .attr("r", 8);
 }
 
 // load_embeddings().then(res => console.table(res));
-draw_embeddings(400, 400);
+draw_embeddings(600, 600);
