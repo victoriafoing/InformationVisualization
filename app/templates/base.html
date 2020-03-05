@@ -2,68 +2,77 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
-	<title>{% block title %}{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="icon" type="image/png" href="../static/img/favicon-32x32.png">
 
-	<!-- Bootstrap core CSS -->
-	<link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- D3 package -->
-	<script src="https://d3js.org/d3.v5.min.js"></script>
+  <!-- D3 package -->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
 
-	<style>
-		p, .txt {  text-align: justify;
-  			 text-justify: inter-word;
-  			}
-        .bar:hover{
-            fill: brown;
-        }
+  <style>
+    p,
+    .txt {
+      text-align: justify;
+      text-justify: inter-word;
+    }
 
-        .axis {
-          font: 10px sans-serif;
-        }
+    .bar:hover {
+      fill: brown;
+    }
 
-        .axis path,
-        .axis line {
-          fill: none;
-          stroke: #000;
-          shape-rendering: crispEdges;
-        }
+    .axis {
+      font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
 
 
-        div.tooltip {
-            position: absolute;
-            text-align: center;
-            white-space: nowrap;
-            height: 100px;
-            padding: 2px;
-            font: 8px sans-serif;
-            background: lightsteelblue;
-            border: 0px;
-            border-radius: 8px;
-            pointer-events: none;
-        }
-
-	</style>
+    div.tooltip {
+      position: absolute;
+      text-align: center;
+      white-space: nowrap;
+      height: 100px;
+      padding: 2px;
+      font: 8px sans-serif;
+      background: lightsteelblue;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+  </style>
 </head>
+
 <body>
-	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md" id="navbar-top">
-		<a class="navbar-brand col-1" id="title" href="#">Information Visualization 2020</a>
-	</nav>
-	<main role="main" class="flex-shrink-0">
-		<div class="tooltip" id="tooltip"></div>
-		<div class="container-flui col-lg-8 offset-lg-2" id="main-content-container">
-			{% block body %}
-			{% endblock %}
-		</div>
-	</main>
+  <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md" id="navbar-top">
+    <a class="navbar-brand col-1" id="title" href="#">Information Visualization 2020</a>
+  </nav>
+  <main role="main" class="flex-shrink-0">
+    <div class="tooltip" id="tooltip"></div>
+    <div class="container-flui col-lg-8 offset-lg-2" id="main-content-container">
+      {% block body %}
+      {% endblock %}
+    </div>
+  </main>
 </body>
 
 <!-- Example of Reddit Card. Here I want to sample from our set to display an example. Wolf -->
-<blockquote class="reddit-card" data-card-created="1582734801"><a href="https://www.reddit.com/r/conspiracy/comments/34wxgc/come_look_at_all_the_brainwashed_idiots_in/">Come look at all the brainwashed idiots in r/Documentaries</a> from <a href="http://www.reddit.com/r/conspiracy">r/conspiracy</a></blockquote>
+<blockquote class="reddit-card" data-card-created="1582734801"><a
+    href="https://www.reddit.com/r/conspiracy/comments/34wxgc/come_look_at_all_the_brainwashed_idiots_in/">Come look at
+    all the brainwashed idiots in r/Documentaries</a> from <a href="http://www.reddit.com/r/conspiracy">r/conspiracy</a>
+</blockquote>
 <script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
+
 </html>
