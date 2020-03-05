@@ -1,10 +1,15 @@
+#embeddings {
+    --redit-color: #FF4500;
+    --transition-duration: 200ms;
+}
+
 .embedding-node {
-    fill: #FF4500;
+    fill: var(--redit-color);
     fill-opacity: 33%;
-    transition: fill-opacity 250ms;
+    transition: fill-opacity var(--transition-duration);
 }
 
 .embedding-node:hover {
     fill-opacity: 100%;
-    transition: fill-opacity 250ms;
+    transition: fill-opacity var(--transition-duration);
 }
