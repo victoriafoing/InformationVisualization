@@ -9,18 +9,15 @@
 
 <h1 class="mt-3">Reddit Hyperlinks and Embeddings</h1>
 
-<!-- <p class="lead"></p> -->
-<!-- <p class="text"></p> -->
+<!-- Example of Reddit Card. Here I want to sample from our set to display an example. Wolf -->
+<blockquote class="reddit-card" data-card-created="1582734801"><a
+    href="https://www.reddit.com/r/conspiracy/comments/34wxgc/come_look_at_all_the_brainwashed_idiots_in/">Come look at
+    all the brainwashed idiots in r/Documentaries</a> from <a href="http://www.reddit.com/r/conspiracy">r/conspiracy</a>
+</blockquote>
+<script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
 
 <div class="mt-3" id="barchart"></div>
 
-{#<script type="text/javascript" charset="utf-8">
-    var df = {{ df | tojson }};
-    console.log(df)
-    </script> #}
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
 <script type="text/javascript" charset="utf-8">
         var socket = io.connect('http://' + document.domain + ':' + location.port);
         // verify our websocket connection is established
@@ -39,9 +36,9 @@
         //             width = 2000 ,
         //             height = 500;
 
-        //         var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+        //         var x = d3.scaleOrdinal().rangeRoundBands([0, width], .05);
 
-        //         var y = d3.scale.linear().range([height, 0]);
+        //         var y = d3.scaleLinear().range([height, 0]);
         //         var xAxis = d3.svg.axis()
         //                     .scale(x)
         //                     .orient("bottom")
@@ -155,11 +152,11 @@
 
                 var lCol = "infant.mortality";
                 var rCol = "gdp";
-                var xFrom = d3.scale.linear()
+                var xFrom = d3.scaleLinear()
                     .range([0, width]);
-                var xTo = d3.scale.linear()
+                var xTo = d3.scaleLinear()
                     .range([0, width]);
-                var y = d3.scale.ordinal()
+                var y = d3.scaleOrdinal()
                     .rangeBands([20, height]);
 
                 function render(data) {
@@ -260,15 +257,11 @@
         var data = {{ data | safe
     }};
     var selected_area = {{ selected_area_name | tojson }};
-</script>
-
-<link rel="stylesheet" type="text/css" href="../static/css/barchart.css">
-<script type="text/javascript" src="../static/js/barchart.js"></script> #}
+</script> #}
 
 <!-- Emmbeddings -->
-<div class="mt-3" id="embeddings"></div>
+<div class="mt-3" id="embeddings" style="text-align: center"></div>
 <link rel="stylesheet" type="text/css" href="../static/css/embeddings.css">
 <script type="text/javascript" src="../static/js/embeddings.js"></script>
-
 
 {% endblock %}
