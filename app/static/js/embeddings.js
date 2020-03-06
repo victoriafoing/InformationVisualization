@@ -7,31 +7,30 @@ async function load_embeddings() {
 
 async function draw_embeddings(width, height) {
     // Fetching embeddings
-    let embeddings = await fetch("/embeddings");
-    embeddings = await embeddings.json();
+    const embeddings = await (await fetch("/embeddings")).json();
 
 
     // Set up SVG
-    let svg = d3.select("#embeddings").append("svg")
+    const svg = d3.select("#embeddings").append("svg")
         .attr("width", width)
         .attr("height", height);
 
 
     // Computing scale
-    let xs = [];
-    let ys = [];
-    let margin = 0.1;
+    const xs = [];
+    const ys = [];
+    const margin = 0.1;
 
     embeddings.forEach(emb => {
         xs.push(emb[1]);
         ys.push(emb[2]);
     });
 
-    let x = d3.scaleLinear()
+    const x = d3.scaleLinear()
         .domain([Math.min(...xs), Math.max(...xs)])
         .range([margin * width, (1 - margin) * width]);
 
-    let y = d3.scaleLinear()
+    const y = d3.scaleLinear()
         .domain([Math.min(...ys), Math.max(...ys)])
         .range([(1 - margin) * height, margin * height]);
 
