@@ -1,5 +1,6 @@
 from flask import render_template, request, jsonify, current_app
 import pandas as pd
+import requests
 
 from app import data
 from . import main
@@ -40,6 +41,12 @@ def get_data():
 @main.route("/embeddings", methods=['GET'])
 def get_embeddings():
     return embeddings
+
+
+@main.route("/reddit-info/<url>", methods=['GET'])
+def test(url):
+    url = 'https://www.reddit.com/r/' + url + '/about.json'
+    return requests.get(url, headers={'User-agent': 'Reddit Vis'}).text
 
 
 # @main.route('/d3', methods=['GET', 'POST'])
