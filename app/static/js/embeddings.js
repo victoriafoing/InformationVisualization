@@ -1,10 +1,3 @@
-async function load_embeddings() {
-    let embeddings = await fetch("/embeddings");
-    embeddings = await embeddings.json();
-
-    return embeddings;
-}
-
 async function draw_embeddings(width, height) {
     // Fetching embeddings
     const embeddings = await (await fetch("/embeddings")).json();
@@ -13,8 +6,8 @@ async function draw_embeddings(width, height) {
     // Set up SVG
     const svg = d3.select("#embeddings").append("svg")
         .attr("width", width)
-        .attr("height", height);
-
+        .attr("height", height)
+        .on("mousemove", move_tooltip);
 
     // Computing scale
     const xs = [];
@@ -43,8 +36,9 @@ async function draw_embeddings(width, height) {
         .attr("class", "embedding-node")
         .attr("cx", d => x(d[1]))
         .attr("cy", d => y(d[2]))
-        .attr("r", 8);
+        .attr("r", 8)
+        .on("mouseover", show_tooltip)
+        .on("mouseout", hide_tooltip);
 }
 
-// load_embeddings().then(res => console.table(res));
 draw_embeddings(600, 600);

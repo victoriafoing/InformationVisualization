@@ -134,7 +134,7 @@
         //                 return height - y(d.sentiment)
         //           });
         //     });
-
+{# 
         var fetch_url = '/top/' + '2017' + '/' + '1';
         fetch(fetch_url)
             .then(function (response) {
@@ -249,7 +249,7 @@
 
                 }
 
-            })
+            }) #}
 </script>
 
 <!-- Example -->
@@ -260,8 +260,12 @@
 </script> #}
 
 <!-- Emmbeddings -->
-<div class="mt-3" id="embeddings" style="text-align: center"></div>
+<div id="embeddings-tooltip"></div>
+<div class="mt-3" id="embeddings"></div>
+
 <link rel="stylesheet" type="text/css" href="../static/css/embeddings.css">
+
+<script type="text/javascript" src="../static/js/embeddings-tooltip.js"></script>
 <script type="text/javascript" src="../static/js/embeddings.js"></script>
 
 {% endblock %}
