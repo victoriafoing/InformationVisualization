@@ -4,7 +4,7 @@ import pandas as pd
 def load_csv(file: str):
     ext = file[-3:]
     if ext == 'tsv':
-        df = pd.read_csv(file, delimiter='\t', index_col=0)
+        df = pd.read_csv(file, delimiter='\t')
 
     elif ext == 'csv':
         df = pd.read_csv(file)
@@ -87,31 +87,40 @@ def calc_stats_for_month_year(df, month, year):
 #     return df_src.nlargest(5, 'Sent_count')
 
 
-def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5):
+def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5, min_count = 1000):
     '''
     :param sent: True for positive, False for negative sentiment
-    :param is_tar: 
+    :param is_tar:
     '''
-    if sent:
-        df = df[df['LINK_SENTIMENT'] > 0]
-    else:
-        df = df[df['LINK_SENTIMENT'] < 0]
-        df['LINK_SENTIMENT'] = df['LINK_SENTIMENT'] * -1
-
-    filtered_df = filter_year(int(year), filter_month(int(month), df))
-
     if is_tar:
         direction = 'TARGET_SUBREDDIT'
     else:
         direction = 'SOURCE_SUBREDDIT'
 
+    # Filter subreddits that dont appear often
+    v = df[direction].value_counts()
+    df_big = df[df[direction].isin(v.index[v.gt(min_count)])]
+
+    if sent:
+        df_big = df_big[df_big['LINK_SENTIMENT'] > 0]
+    else:
+        df_big = df_big[df_big['LINK_SENTIMENT'] < 0]
+        df_big['LINK_SENTIMENT'] = df_big['LINK_SENTIMENT'] * -1
+
+    filtered_df = filter_year(int(year), filter_month(int(month), df_big))
+
+
     grouped = list(
-        filtered_df.groupby(direction)
-        ['LINK_SENTIMENT'].sum().sort_values().items())
-    top = grouped[-n:]
+        filtered_df.groupby(direction)['LINK_SENTIMENT']
+                   .sum()
+                   .sort_values()
+                   .items()
+    )
+    grouped = sorted(list(map(lambda x: (x[0],x[1]/v[x[0]]),grouped)),key= lambda tup: tup[1], reverse=True)
+    top = grouped[:n]
     return [{
         "name" : ele[0],
-        "count" : ele[1]
+        "count" : round(ele[1],3)
     } for ele in top]
 
 
