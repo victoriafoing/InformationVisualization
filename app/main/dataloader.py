@@ -109,10 +109,10 @@ def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5):
         filtered_df.groupby(direction)
         ['LINK_SENTIMENT'].sum().sort_values().items())
     top = grouped[-n:]
-    return {
-        "names": [ele[0] for ele in top],  # lol,the_donald,etc
-        "count": [ele[1] for ele in top]  # 150, 112, etc
-    }
+    return [{
+        "name" : ele[0],
+        "count" : ele[1]
+    } for ele in top]
 
 
 def get_most_hated_loved_subreddits_by_month_year(df, month, year):
