@@ -86,6 +86,13 @@ def calc_stats_for_month_year(df, month, year):
 #     df_src = pd.DataFrame(store.items(), columns=['Sr', 'Sent_count'])
 #     return df_src.nlargest(5, 'Sent_count')
 
+def get_top_5_both_sent(df, month, year, is_tar: bool, n=5, min_count = 1000):
+    good = get_top_5(df, month, year, True, is_tar=is_tar, n=n, min_count=min_count)
+    bad = get_top_5(df, month, year, False, is_tar=is_tar, n=n, min_count=min_count)
+    return {
+        "loved" : good,
+        "hated" : bad
+    }
 
 def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5, min_count = 1000):
     '''

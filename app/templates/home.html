@@ -30,18 +30,19 @@
                      return response.json();
                  })
                  .then((data) => {
-                     console.log(data);
                      var margin = {
                         top: 15,
-                        right: 25,
+                        right: 100,
                         bottom: 15,
-                        left: 300
+                        left: 150
                     };
 
                      // Create width and height
-                     var width =  960 - margin.left - margin.right,
+                     var width =  2*960 - margin.left - margin.right + 200,
                          height = 500 - margin.top - margin.bottom;
 
+
+                     var spread = 40;
                      // Create svg
                      var svg = d3.select("body").append("svg")
                         .attr("width", width + margin.left + margin.right)
@@ -50,146 +51,113 @@
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
                      // X will be a linear scale from 0 to max
-                     var x = d3.scaleLinear()
-                        .range([0, width])
-                        .domain([0, d3.max(data, function (d) {
+                     var xLeft = d3.scaleLinear()
+                        .range([0, width/2 - spread])
+                        .domain([0, d3.max(data.hated, function (d) {
+                            return d.count;
+                        })]);
+
+                      var xRight = d3.scaleLinear()
+                        .range([0, width/2 - spread])
+                        .domain([0, d3.max(data.loved, function (d) {
                             return d.count;
                         })]);
 
                      // Y will be an ordinal scale with the names
-                     var y = d3.scaleBand()
+                     var yLeft = d3.scaleBand()
                          .rangeRound([height, 0])
                          .padding(0.1)
-                         .domain(data.map(function (d) {
+                         .domain(data.hated.map(function (d) {
                             return d.name;
                          }));
 
-                     var yAxis = d3.axisLeft(y)
-                        .scale(y)
+                     var yRight = d3.scaleBand()
+                         .rangeRound([height, 0])
+                         .padding(0.1)
+                         .domain(data.loved.map(function (d) {
+                            return d.name;
+                         }));
+
+                     var yAxisLeft = d3.axisLeft(yLeft)
+                        .scale(yLeft)
+                        .tickSize(0);
+
+                     var yAxisRight = d3.axisRight(yRight)
+                        .scale(yRight)
                         .tickSize(0);
 
                      var gy = svg.append("g")
                         .attr("class", "y axis")
-                        .call(yAxis);
+                        .call(yAxisLeft);
 
-                     var bars = svg.selectAll(".bar")
-                        .data(data)
+                     var gy = svg.append("g")
+                        .attr("class", "y axis")
+                        .attr("transform", "translate(" + width  +", 0)")
+                        .call(yAxisRight);
+
+                     var barsLeft = svg.selectAll(".bar")
+                        .data(data.hated)
+                        .enter()
+                        .append("g");
+
+
+                     var barsRight = svg.selectAll(".bar")
+                        .data(data.loved)
                         .enter()
                         .append("g");
 
                      console.log('appending bars');
 
                      // Append bars
-                     bars.append("rect")
-                        .attr("class", "bargood")
-                        .attr("y", function (d) {
-                            return y(d.name);
-                        })
-                        .attr("height", y.bandwidth())
-                        .attr("x", 0)
-                        .attr("width", function (d) {
-                            return x(d.count);
-                        });
-
-                     //add a value label to the right of each bar
-                    bars.append("text")
-                        .attr("class", "label")
-                        //y position of the label is halfway down the bar
-                        .attr("y", function (d) {
-                            return y(d.name) + y.bandwidth() / 2 + 4;
-                        })
-                        //x position is 3 pixels to the right of the bar
-                        .attr("x", function (d) {
-                            return x(d.count) + 3;
-                        })
-                        .text(function (d) {
-                            return d.count;
-                        });
-
-                    console.log("end");
-
-                 });
-
-             var fetch_url = '/top/2016/03';
-             fetch(fetch_url)
-                 .then(function (response) {
-                     return response.json();
-                 })
-                 .then((data) => {
-                     console.log(data);
-                     var margin = {
-                        top: 15,
-                        right: 300,
-                        bottom: 15,
-                        left: 25
-                    };
-
-                     // Create width and height
-                     var width =  960 - margin.left - margin.right,
-                         height = 500 - margin.top - margin.bottom;
-
-                     // Create svg
-                     var svg = d3.select("body").append("svg")
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                        .append("g")
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-                     // X will be a linear scale from 0 to max
-                     var x = d3.scaleLinear()
-                        .range([width, 0])
-                        .domain([0, d3.max(data, function (d) {
-                            return d.count;
-                        })]);
-
-                     // Y will be an ordinal scale with the names
-                     var y = d3.scaleBand()
-                         .rangeRound([height, 0])
-                         .padding(0.1)
-                         .domain(data.map(function (d) {
-                            return d.name;
-                         }));
-
-                     var yAxis = d3.axisRight(y)
-                        .scale(y)
-                        .tickSize(0);
-
-                     var gy = svg.append("g")
-                        .attr("class", "y axis")
-                        .attr("transform", "translate(" + width + ",0)")
-                        .call(yAxis);
-
-                     var bars = svg.selectAll(".bar")
-                        .data(data)
-                        .enter()
-                        .append("g");
-
-                     console.log('appending bars');
-
-                     // Append bars
-                     bars.append("rect")
+                     barsLeft.append("rect")
                         .attr("class", "bar")
                         .attr("y", function (d) {
-                            return y(d.name);
+                            return yLeft(d.name);
                         })
-                        .attr("height", y.bandwidth())
-                        .attr("x", function (d) {
-                            return x(d.count);
-                        })
+                        .attr("height", yLeft.bandwidth())
+                        .attr("x", 0)
                         .attr("width", function (d) {
-                            return width - x(d.count);
+                            return xLeft(d.count);
                         });
 
                      //add a value label to the right of each bar
-                    bars.append("text")
+                    barsLeft.append("text")
                         .attr("class", "label")
                         //y position of the label is halfway down the bar
                         .attr("y", function (d) {
-                            return y(d.name) + y.bandwidth() / 2 + 4;
+                            return yLeft(d.name) + yLeft.bandwidth() / 2 + 4;
                         })
                         //x position is 3 pixels to the right of the bar
                         .attr("x", function (d) {
-                            return x(d.count) - 20;
+                            return xLeft(d.count) + 3;
+                        })
+                        .text(function (d) {
+                            return d.count;
+                        });
+
+                     barsRight.append("rect")
+                        .attr("class", "bargood")
+                        .attr("y", function (d) {
+                            return yRight(d.name);
+                        })
+                        .attr("height", yRight.bandwidth())
+                        .attr("x", function (d) {
+                            return width - xRight(d.count);
+                        })
+                        .attr("width", function (d) {
+                            return xRight(d.count);
+                        });
+
+                     //add a value label to the right of each bar
+                    barsRight.append("text")
+                        .attr("class", "label")
+                        //y position of the label is halfway down the bar
+                        .attr("y", function (d) {
+                            return yRight(d.name) + yRight.bandwidth() / 2 + 4;
+                        })
+                        //x position is 3 pixels to the right of the bar
+                        .attr("x", function (d) {
+                            return width - xRight(d.count) - 40;
                         })
                         .text(function (d) {
                             return d.count;
@@ -199,226 +167,6 @@
 
                  });
 
-
-
-            //         var margin = {top: 20, right: 20, bottom: 70, left: 200},
-            //             width = 2000 ,
-            //             height = 500;
-
-            //         var x = d3.scaleOrdinal().rangeRoundBands([0, width], .05);
-
-            //         var y = d3.scaleLinear().range([height, 0]);
-            //         var xAxis = d3.svg.axis()
-            //                     .scale(x)
-            //                     .orient("bottom")
-            //                     .ticks(10);
-
-
-            //         var yAxis = d3.svg.axis()
-            //             .scale(y)
-            //             .orient("left")
-            //             .ticks(10);
-
-            //         var svg = d3.select("body").append("svg")
-            //             .attr("width", width + margin.left + margin.right)
-            //             .attr("height", height + margin.top + margin.bottom)
-            //             .append("g")
-            //             .attr("transform",
-            //                   "translate(" + margin.left + "," + margin.top + ")");
-
-            //       x.domain(data.map(function(d) { return d.time; }));
-            //       y.domain([0, d3.max(data, function(d) { return d.sentiment; })]);
-
-            //       svg.append("g")
-            //           .attr("class", "x axis")
-            //           .attr("transform", "translate(0," + height + ")")
-            //           .call(xAxis)
-            //         .selectAll("text")
-            //           .style("text-anchor", "end")
-            //           .attr("dx", "-.8em")
-            //           .attr("dy", "-.55em")
-            //           .attr("transform", "rotate(-90)" );
-
-            //       svg.append("g")
-            //           .attr("class", "y axis")
-            //           .call(yAxis)
-            //         .append("text")
-            //           .attr("transform", "rotate(-90)")
-            //           .attr("y", 6)
-            //           .attr("dy", ".71em")
-            //           .style("text-anchor", "end")
-            //           .text("Total sentiment");
-
-            //         // Define the div for the tooltip
-            //         var div = d3.select("body").append("div")
-            //                     .attr("class", "tooltip")
-            //                     .style("opacity", 0);
-
-            //       svg.selectAll("bar")
-            //           .data(data)
-            //           .enter().append("rect")
-            //           .attr("class", "bar")
-            //           .style("fill", "steelblue")
-            //           .on("mouseover", function(d) {
-            //               div.style("left", (d3.event.pageX) + "px")
-            //                  .style("top", (d3.event.pageY - 28) + "px");
-            //               var fetch_url = '/data/' + d.time[0] + "/" + d.time[1];
-            //               fetch(fetch_url)
-            //                   .then(function (response) {
-            //                       return response.json();
-            //                   })
-            //                   .then((data) => {
-            //                       console.log(data);
-            //                       div.transition(data)
-            //                           .duration(200)
-            //                           .style("opacity", .9);
-            //                       div.html(
-            //                           "<h4> Mean sentiment:" + Math.round(data.mean * 100) / 100 + "<h4>" +
-            //                           "<h4>Standard dev:" +    Math.round(data.std * 100) / 100 + "<h4>"
-            //                       )
-            //                   });
-
-            //               var fetch_url = '/top/' + d.time[0] + "/" + d.time[1];
-            //               fetch(fetch_url)
-            //                   .then(function (response) {
-            //                       return response.json();
-            //                   })
-            //                   .then((data) => {
-            //                       console.log(data);
-            //                       div.html(
-            //                           "<h4><p style=\"color:red; font: 20px sans-serif;\"> Most hated</p>: " + data.hated.name  +
-            //                           "<p style=\"color:green; font: 20px sans-serif;\"> Most loved</p>: " + data.loved.name+"</h4>"
-            //                       )
-            //                   });
-            //           })
-            //           .on("mouseout", function(d) {
-            //                 div.transition()
-            //                     .duration(500)
-            //                     .style("opacity", 0);
-            //           })
-            //           .attr("x", function(d) { return x(d.time); })
-            //           .attr("width", x.rangeBand())
-            //           .attr("y", function(d) { return y(d.sentiment); })
-            //           .attr("height", function(d) {
-            //                 return height - y(d.sentiment)
-            //           });
-            //     });
-    {#
-            var fetch_url = '/top/' + '2017' + '/' + '1';
-            fetch(fetch_url)
-                .then(function (response) {
-                    return response.json();
-                })
-                .then((data) => {
-                    console.log("here")
-                    console.log(data.names)
-                    var labelArea = 160;
-                    var chart,
-                        width = 400,
-                        bar_height = 20,
-                        height = bar_height * 200;
-                    var rightOffset = width + labelArea;
-
-                    var lCol = "infant.mortality";
-                    var rCol = "gdp";
-                    var xFrom = d3.scaleLinear()
-                        .range([0, width]);
-                    var xTo = d3.scaleLinear()
-                        .range([0, width]);
-                    var y = d3.scaleOrdinal()
-                        .rangeBands([20, height]);
-
-                    function render(data) {
-                        var chart = d3.select("body")
-                            .append('svg')
-                            .attr('class', 'chart')
-                            .attr('width', labelArea + width + width)
-                            .attr('height', height);
-
-                        xFrom.domain(d3.extent(data, function (d) {
-                            return d[lCol];
-                        }));
-                        xTo.domain(d3.extent(data, function (d) {
-                            return d[rCol];
-                        }));
-
-                        y.domain(data.map(function (d) {
-                            return d.countries;
-                        }));
-
-                        var yPosByIndex = function (d) {
-                            return y(d.countries);
-                        };
-                        chart.selectAll("rect.left")
-                            .data(data)
-                            .enter().append("rect")
-                            .attr("x", function (d) {
-                                return width - xFrom(d[lCol]);
-                            })
-                            .attr("y", yPosByIndex)
-                            .attr("class", "left")
-                            .attr("width", function (d) {
-                                return xFrom(d[lCol]);
-                            })
-                            .attr("height", y.rangeBand());
-                        chart.selectAll("text.leftscore")
-                            .data(data)
-                            .enter().append("text")
-                            .attr("x", function (d) {
-                                return width - xFrom(d[lCol]) - 40;
-                            })
-                            .attr("y", function (d) {
-                                return y(d.countries) + y.rangeBand() / 2;
-                            })
-                            .attr("dx", "20")
-                            .attr("dy", ".36em")
-                            .attr("text-anchor", "end")
-                            .attr('class', 'leftscore')
-                            .text(function (d) { return d[lCol]; });
-                        chart.selectAll("text.name")
-                            .data(data)
-                            .enter().append("text")
-                            .attr("x", (labelArea / 2) + width)
-                            .attr("y", function (d) {
-                                return y(d.countries) + y.rangeBand() / 2;
-                            })
-                            .attr("dy", ".20em")
-                            .attr("text-anchor", "middle")
-                            .attr('class', 'name')
-                            .text(function (d) { return d.countries; });
-
-                        chart.selectAll("rect.right")
-                            .data(data)
-                            .enter().append("rect")
-                            .attr("x", rightOffset)
-                            .attr("y", yPosByIndex)
-                            .attr("class", "right")
-                            .attr("width", function (d) {
-                                return xTo(d[rCol]);
-                            })
-                            .attr("height", y.rangeBand());
-                        chart.selectAll("text.score")
-                            .data(data)
-                            .enter().append("text")
-                            .attr("x", function (d) {
-                                return xTo(d[rCol]) + rightOffset + 40;
-                            })
-                            .attr("y", function (d) {
-                                return y(d.countries) + y.rangeBand() / 2;
-                            })
-                            .attr("dx", -5)
-                            .attr("dy", ".36em")
-                            .attr("text-anchor", "end")
-                            .attr('class', 'score')
-                            .text(function (d) { return d[rCol]; });
-                        chart.append("text").attr("x", width / 3).attr("y", 10).attr("class", "title").text("Infant Mortality");
-                        chart.append("text").attr("x", width / 3 + rightOffset).attr("y", 10).attr("class", "title").text("GDP");
-                        chart.append("text").attr("x", width + labelArea / 3).attr("y", 10).attr("class", "title").text("Countries");
-
-
-                    }
-
-                }) #}
     </script>
 </div>
 

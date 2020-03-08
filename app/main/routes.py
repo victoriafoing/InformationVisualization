@@ -4,7 +4,7 @@ import pandas as pd
 from app import data
 from . import main
 from .dataloader import load_csv, load_fake_data, get_timeline_data, calc_stats_for_month_year, \
-    get_most_hated_loved_subreddits_by_month_year, get_top_5
+    get_most_hated_loved_subreddits_by_month_year, get_top_5, get_top_5_both_sent
 from .dim_reduction import dim_reduct
 
 import json
@@ -27,7 +27,7 @@ def get_data_by_month_year(month, year):
 
 @main.route("/top/<year>/<month>", methods=['GET'])
 def get_top_subreddits_by_month_year(month, year):
-    data = get_top_5(current_app.df, month, year, False, False)
+    data = get_top_5_both_sent(current_app.df, month, year, False)
     print(data)
     return json.dumps(data)
 
