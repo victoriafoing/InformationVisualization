@@ -146,6 +146,4 @@ fetch(fetch_url)
             });
 
         console.log("end");
-        d3.select("#barchart").append("svg")
-
 });
