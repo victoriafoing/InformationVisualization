@@ -6,89 +6,93 @@ socket.on('connect', function () {
 
 var fetch_url = '/top/2017/02';
 fetch(fetch_url)
-     .then(function (response) {
-         return response.json();
-     })
-     .then((data) => {
-         var margin = {
+    .then(function (response) {
+        return response.json();
+    })
+    .then((data) => {
+        var margin = {
             top: 15,
             right: 100,
             bottom: 15,
             left: 150
         };
 
-         // Create width and height
-         var width =  2*960 - margin.left - margin.right + 200,
-             height = 500 - margin.top - margin.bottom;
+        // Create width and height
+        // var width = 2 * 960 - margin.left - margin.right + 200,
+        //height = 500 - margin.top - margin.bottom;
+        var svg = d3.select("#barchart"),
+            margin = {top: 35, right: 55, bottom: 15, left: 35},
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom;
 
-         var spread = 40;
-         // Create svg
-         var svg = d3.select("body").append("svg")
+        var spread = 40;
+        // Create svg
+        /*var svg = d3.select("body").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-         // X will be a linear scale from 0 to max
-         var xLeft = d3.scaleLinear()
-            .range([0, width/2 - spread])
+*/
+        // X will be a linear scale from 0 to max
+        var xLeft = d3.scaleLinear()
+            .range([0, width / 2 - spread])
             .domain([0, d3.max(data.hated, function (d) {
                 return d.count;
             })]);
 
-          var xRight = d3.scaleLinear()
-            .range([0, width/2 - spread])
+        var xRight = d3.scaleLinear()
+            .range([0, width / 2 - spread])
             .domain([0, d3.max(data.loved, function (d) {
                 return d.count;
             })]);
 
-         // Y will be an ordinal scale with the names
-         var yLeft = d3.scaleBand()
-             .rangeRound([height, 0])
-             .padding(0.1)
-             .domain(data.hated.map(function (d) {
+        // Y will be an ordinal scale with the names
+        var yLeft = d3.scaleBand()
+            .rangeRound([height, 0])
+            .padding(0.1)
+            .domain(data.hated.map(function (d) {
                 return d.name;
-             }));
+            }));
 
-         var yRight = d3.scaleBand()
-             .rangeRound([height, 0])
-             .padding(0.1)
-             .domain(data.loved.map(function (d) {
+        var yRight = d3.scaleBand()
+            .rangeRound([height, 0])
+            .padding(0.1)
+            .domain(data.loved.map(function (d) {
                 return d.name;
-             }));
+            }));
 
-         var yAxisLeft = d3.axisLeft(yLeft)
+        var yAxisLeft = d3.axisLeft(yLeft)
             .scale(yLeft)
             .tickSize(0);
 
-         var yAxisRight = d3.axisRight(yRight)
+        var yAxisRight = d3.axisRight(yRight)
             .scale(yRight)
             .tickSize(0);
 
-         var gy = svg.append("g")
+        var gy = svg.append("g")
             .attr("class", "y axis")
             .call(yAxisLeft);
 
-         var gy = svg.append("g")
+        var gy = svg.append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(" + width  +", 0)")
+            .attr("transform", "translate(" + width + ", 0)")
             .call(yAxisRight);
 
-         var barsLeft = svg.selectAll(".bar")
+        var barsLeft = svg.selectAll(".bar")
             .data(data.hated)
             .enter()
             .append("g");
 
 
-         var barsRight = svg.selectAll(".bar")
+        var barsRight = svg.selectAll(".bar")
             .data(data.loved)
             .enter()
             .append("g");
 
-         console.log('appending bars');
+        console.log('appending bars');
 
-         // Append bars
-         barsLeft.append("rect")
+        // Append bars
+        barsLeft.append("rect")
             .attr("class", "bar")
             .attr("y", function (d) {
                 return yLeft(d.name);
@@ -99,7 +103,7 @@ fetch(fetch_url)
                 return xLeft(d.count);
             });
 
-         //add a value label to the right of each bar
+        //add a value label to the right of each bar
         barsLeft.append("text")
             .attr("class", "label")
             //y position of the label is halfway down the bar
@@ -114,7 +118,7 @@ fetch(fetch_url)
                 return d.count;
             });
 
-         barsRight.append("rect")
+        barsRight.append("rect")
             .attr("class", "bargood")
             .attr("y", function (d) {
                 return yRight(d.name);
@@ -127,7 +131,7 @@ fetch(fetch_url)
                 return xRight(d.count);
             });
 
-         //add a value label to the right of each bar
+        //add a value label to the right of each bar
         barsRight.append("text")
             .attr("class", "label")
             //y position of the label is halfway down the bar
@@ -142,5 +146,12 @@ fetch(fetch_url)
                 return d.count;
             });
 
+        svg.append("text")
+            .attr("class", "title")
+            .attr("x", (width / 2))
+            .attr("y", margin.top)
+            .attr("text-anchor", "middle")
+            .text("Interactive timeline");
+
         console.log("end");
-});
+    });

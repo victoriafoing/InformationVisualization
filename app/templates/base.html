@@ -4,58 +4,59 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <title>{% block title %}{% endblock %}</title>
-  <link rel="icon" type="image/png" href="../static/img/favicon-32x32.png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <!-- Bootstrap core CSS -->
-  <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="../static/img/favicon-32x32.png">
 
-  <!-- Libraries -->
-  <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-    p,
-    .txt {
-      text-align: justify;
-      text-justify: inter-word;
-    }
+    <!-- Libraries -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 
-    .bar:hover {
-      fill: brown;
-    }
+    <style>
+        p,
+        .txt {
+            text-align: justify;
+            text-justify: inter-word;
+        }
 
-    .axis {
-      font: 10px sans-serif;
-    }
+        .bar:hover {
+            fill: brown;
+        }
 
-    .axis path,
-    .axis line {
-      fill: none;
-      stroke: #000;
-      shape-rendering: crispEdges;
-    }
+        .axis {
+            font: 10px sans-serif;
+        }
 
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
 
-    div.tooltip {
-      position: absolute;
-      text-align: center;
-      white-space: nowrap;
-      height: 100px;
-      padding: 2px;
-      font: 8px sans-serif;
-      background: lightsteelblue;
-      border: 0px;
-      border-radius: 8px;
-      pointer-events: none;
-    }
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            white-space: nowrap;
+            height: 100px;
+            padding: 2px;
+            font: 8px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
 
-      body {
+        body {
             font-family: "Arial", sans-serif;
+            position: relative;
         }
 
         .bar {
@@ -79,20 +80,20 @@
         .label {
             font-size: 13px;
         }
-  </style>
+    </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md" id="navbar-top">
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md" id="navbar-top">
     <a class="navbar-brand col-1" id="title" href="#">Information Visualization 2020</a>
-  </nav>
-  <main role="main" class="flex-shrink-0">
+</nav>
+<main role="main" class="flex-shrink-0">
     <div class="tooltip" id="tooltip"></div>
     <div class="container-flui col-lg-8 offset-lg-2" id="main-content-container">
-      {% block body %}
-      {% endblock %}
+        {% block body %}
+        {% endblock %}
     </div>
-  </main>
+</main>
 </body>
 
 </html>

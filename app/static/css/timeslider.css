@@ -1,28 +1,35 @@
 body {
-    font-family:"avenir next", Arial, sans-serif;
+    font-family: "avenir next", Arial, sans-serif;
     font-size: 12px;
     color: #696969;
 }
 
 #play-button {
     position: absolute;
-    top: 140px;
-    left: 50px;
+    top: 650px;
+    left: 240px;
     background: #f08080;
     padding-right: 26px;
     border-radius: 3px;
     border: none;
     color: white;
-    margin: 0;
+    margin: auto;
     padding: 0 12px;
-    width: 60px;
+    width: 50%;
     cursor: pointer;
     height: 30px;
 }
 
+.center {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+}
+
 #play-button:hover {
     background-color: #696969;
-}    
+}
 
 .ticks {
     font-size: 10px;
