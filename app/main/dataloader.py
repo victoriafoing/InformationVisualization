@@ -149,6 +149,43 @@ def get_most_hated_loved_subreddits_by_month_year(df, month, year):
         }
     }
 
+def get_activity(df, subreddit):
+
+    temp = df.copy()
+
+    # Add time categories for grouping
+    temp["Date"] = temp["TIMESTAMP"].astype(str).str.split(expand=True)[0]
+    temp['Year-Month'] = temp["Date"].str[:7]
+
+    # Add sentiment categories to facilitate sums
+    temp['pos_source'] = ((df.SOURCE_SUBREDDIT == subreddit) & (df.LINK_SENTIMENT == 1)).map(
+        {True: 1, False: 0})
+    temp['neg_source'] = ((df.SOURCE_SUBREDDIT == subreddit) & (df.LINK_SENTIMENT == -1)).map(
+        {True: 1, False: 0})
+    temp['pos_target'] = ((df.TARGET_SUBREDDIT == subreddit) & (df.LINK_SENTIMENT == 1)).map(
+        {True: 1, False: 0})
+    temp['neg_target'] = ((df.TARGET_SUBREDDIT == subreddit) & (df.LINK_SENTIMENT == -1)).map(
+        {True: 1, False: 0})
+
+    # Group table by year-month and calculate sums for sentiment categories
+    activity = temp.groupby('Year-Month')[['pos_source', 'neg_source', 'pos_target', 'neg_target']].sum()
+
+    dates = list(activity.groupby('Year-Month').groups.keys())
+
+    # Convert grouped sums to lists
+    pos_source = list(activity['pos_source'])
+    neg_source = list(activity['neg_source'])
+    pos_target = list(activity['pos_target'])
+    neg_target = list(activity['neg_target'])
+
+    # Return list of dictionaries (one dictionary for each time point)
+    return [{
+        "date": dates[i],
+        "pos_source": pos_source[i],
+        "neg_source": neg_source[i],
+        "pos_target": pos_target[i],
+        "neg_target": neg_target[i],
+    } for i in range(0,len(dates))]
 
 if __name__ == '__main__':
 

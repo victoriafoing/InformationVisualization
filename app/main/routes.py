@@ -4,7 +4,7 @@ import pandas as pd
 from app import data
 from . import main
 from .dataloader import load_csv, load_fake_data, get_timeline_data, calc_stats_for_month_year, \
-    get_most_hated_loved_subreddits_by_month_year, get_top_5, get_top_5_both_sent
+    get_most_hated_loved_subreddits_by_month_year, get_top_5, get_top_5_both_sent, get_activity
 from .dim_reduction import dim_reduct
 
 import json
@@ -37,6 +37,11 @@ def get_data():
     data = get_timeline_data(current_app.df)
     return json.dumps(data)
 
+@main.route("/activity/<subreddit>", methods=['GET'])
+def get_subreddit_activity(subreddit):
+
+    data = get_activity(current_app.df, subreddit)
+    return json.dumps(data)
 #
 # @main.route("/embeddings", methods=['GET'])
 # def get_embeddings():
