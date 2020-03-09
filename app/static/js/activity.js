@@ -1,18 +1,3 @@
-var socket = io.connect('http://' + document.domain + ':' + location.port);
-// verify our websocket connection is established
-socket.on('connect', function () {
-    console.log('Websocket connected!');
-});
-
-var subreddit = "subredditdrama"
-var fetch_url = '/activity/'+subreddit;
-fetch(fetch_url)
-     .then(function (response) {
-         return response.json();
-     })
-     .then((data) => activity_timeline(data))
-
-/// multiline
 function activity_timeline(data) {
 
     // Get sentiment categories
@@ -82,13 +67,6 @@ function activity_timeline(data) {
 		.attr("x", margin.left)
 		.attr("width", width - margin.right - margin.left)
 		.attr("height", height)
-
-    svg.append("text")
-        .attr("class", "title")
-        .attr("x", (width / 2))
-        .attr("y", margin.top)
-        .attr("text-anchor", "middle")
-        .text("Activity Timeline for "+subreddit);
 
     // Update activity timeline based on selection box
 	update(d3.select('#selectbox').property('value'), 0);

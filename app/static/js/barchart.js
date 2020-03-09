@@ -34,6 +34,7 @@ fetch(fetch_url)
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 */
         // X will be a linear scale from 0 to max
+
         var xLeft = d3.scaleLinear()
             .range([0, width / 2 - spread])
             .domain([0, d3.max(data.hated, function (d) {
@@ -81,13 +82,32 @@ fetch(fetch_url)
         var barsLeft = svg.selectAll(".bar")
             .data(data.hated)
             .enter()
-            .append("g");
+            .append("g")
+            .on("click", function(d){
+                console.log(d.name);
+                var fetch_url = '/activity/'+d.name;
+                fetch(fetch_url)
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then((data) => activity_timeline(data))
+              });
 
 
         var barsRight = svg.selectAll(".bar")
             .data(data.loved)
             .enter()
-            .append("g");
+            .append("g")
+            .on("click", function(d){
+                console.log(d.name);
+                var fetch_url = '/activity/'+d.name;
+                fetch(fetch_url)
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then((data) => activity_timeline(data))
+            });
+
 
         console.log('appending bars');
 
@@ -152,6 +172,7 @@ fetch(fetch_url)
             .attr("y", margin.top)
             .attr("text-anchor", "middle")
             .text("Interactive timeline");
+
 
         console.log("end");
     });
