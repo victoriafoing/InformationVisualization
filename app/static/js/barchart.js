@@ -20,9 +20,6 @@ fetch(fetch_url)
          // Create width and height
          var width =  2*960 - margin.left - margin.right + 200,
              height = 500 - margin.top - margin.bottom;
-          //var width =  100,
-             //height = 100;
-
 
          var spread = 40;
          // Create svg
