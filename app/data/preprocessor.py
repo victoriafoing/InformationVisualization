@@ -1,4 +1,7 @@
+import json
+
 import pandas as pd
+import requests
 
 
 def transform_properties(infile: str, outfile: str) -> None:
@@ -70,11 +73,56 @@ def process_embeddings(infile: str, outfile: str) -> None:
             outfile.write(f'{line}\n')
 
 
-def filter_embeddings(infile: str, outfile: str, n=250) -> None:
+def filter_embeddings(infile: str, outfile: str, n: int) -> None:
     df = pd.read_csv(infile, index_col='SUBREDDIT_ID')
     most_active = most_active_sr('reddit-body-filtered.tsv',
                                  'reddit-title-filtered.tsv', n)
     df.loc[most_active].to_csv(outfile)
+
+
+def fetch_thumbnails_description(outfile: str, n: int) -> None:
+    most_active = most_active_sr('reddit-body-filtered.tsv',
+                                 'reddit-title-filtered.tsv', n)
+
+    community_icons = []
+    icon_imgs = []
+    public_descriptions = []
+
+    for sr in most_active:
+        url = 'https://www.reddit.com/r/' + sr + '/about.json'
+        sr_info = requests.get(
+            url, headers={'User-agent': 'Reddit Visualization Project'})
+
+        if sr_info.status_code == 200:
+            sr_info = sr_info.json()['data']
+
+            community_icons.append(sr_info['community_icon'])
+            icon_imgs.append(sr_info['icon_img'])
+            public_descriptions.append(sr_info['public_description'])
+
+        elif sr_info.status_code == 403 or sr_info.status_code == 404:
+            sr_info = sr_info.json()
+
+            community_icons.append(
+                'https://styles.redditmedia.com/t5_6/styles/communityIcon_a8uzjit9bwr21.png'
+            )
+            icon_imgs.append(None)
+            public_descriptions.append(
+                f"data not found because the subreddit is {sr_info['reason']}")
+            print(f"data not found for {sr} because it is {sr_info['reason']}")
+
+        else:
+            print("Other status code")
+            print(sr_info.status_code)
+            print(sr_info.json())
+
+    df = pd.Index(most_active, name='SUBREDDIT_ID')
+    df = pd.DataFrame(index=df)
+    df['COMMUNITY_ICON'] = community_icons
+    df['ICON_IMG'] = icon_imgs
+    df['PUBLIC_DESCRIPTIONS'] = public_descriptions
+
+    df.to_csv(outfile)
 
 
 if __name__ == '__main__':
@@ -100,6 +148,12 @@ if __name__ == '__main__':
         process_embeddings('web-redditEmbeddings-subreddits.csv',
                            'reddit-embedding.csv')
 
+    n = 250
+
     if not os.path.exists('reddit-embedding-filtered.csv'):
         filter_embeddings('reddit-embedding.csv',
-                          'reddit-embedding-filtered.csv')
+                          'reddit-embedding-filtered.csv', n)
+
+    if not os.path.exists('reddit-embedding-thumbnail-description.csv'):
+        fetch_thumbnails_description(
+            'reddit-embedding-thumbnail-description.csv', n)
