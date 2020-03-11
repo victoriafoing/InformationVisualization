@@ -107,7 +107,11 @@ def fetch_thumbnails_description(outfile: str, n: int) -> None:
                     'https://styles.redditmedia.com/t5_6/styles/communityIcon_a8uzjit9bwr21.png'
                 )
 
-            public_descriptions.append(sr_info['public_description'])
+            description = sr_info['public_description']
+            if description != '':
+                public_descriptions.append(description)
+            else :
+                public_descriptions.append("This subreddit does not have a description")
 
         elif sr_info.status_code in [403, 404]:
             sr_info = sr_info.json()
