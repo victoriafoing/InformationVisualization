@@ -6,13 +6,19 @@ from app import data
 from . import main
 from .dataloader import load_csv, load_fake_data, get_timeline_data, calc_stats_for_month_year, \
     get_most_hated_loved_subreddits_by_month_year, get_top_5
-from .dim_reduction import dim_reduct
+from .dim_reduction import dim_reduct, merge_thumbnails_descriptions
 
 import json
+import time
 
 # Initialization
+print('Computing embbedings dimensionality reduction ... ', end='', flush=True)
+start = time.time()
 embeddings = dim_reduct('app/data/reddit-embedding-filtered.csv')
+embeddings = merge_thumbnails_descriptions(
+    embeddings, 'app/data/reddit-embedding-thumbnail-description.csv')
 embeddings = json.dumps(embeddings)
+print(f'Done ! ({round(time.time() - start, 2)}s)')
 
 
 @main.route('/', methods=['GET'])
