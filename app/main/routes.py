@@ -12,13 +12,13 @@ import json
 import time
 
 # Initialization
-print('Computing embbedings dimensionality reduction ... ', end='', flush=True)
-start = time.time()
+# print('Computing embbedings dimensionality reduction ... ', end='', flush=True)
+# start = time.time()
 embeddings = dim_reduct('app/data/reddit-embedding-filtered.csv')
 embeddings = merge_thumbnails_descriptions(
     embeddings, 'app/data/reddit-embedding-thumbnail-description.csv')
 embeddings = json.dumps(embeddings)
-print(f'Done ! ({round(time.time() - start, 2)}s)')
+# print(f'Done ! ({round(time.time() - start, 2)}s)')
 
 
 @main.route('/', methods=['GET'])
@@ -52,4 +52,4 @@ def get_embeddings():
 @main.route("/reddit-info/<url>", methods=['GET'])
 def test(url):
     url = 'https://www.reddit.com/r/' + url + '/about.json'
-    return requests.get(url, headers={'User-agent': 'Reddit Vis'}).text
+    return requests.get(url, headers={'User-agent': 'Reddit Visualization Project'}).text

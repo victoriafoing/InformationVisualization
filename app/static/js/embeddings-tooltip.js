@@ -1,7 +1,13 @@
-const embeddings_tooltip = d3.select("#embeddings-tooltip");
+const embeddings_tooltip = d3.select('#embeddings-tooltip');
+const embeddings_thumbnail = embeddings_tooltip.select('#embeddings-tooltip-thumbnail');
+const embeddings_title = embeddings_tooltip.select('#embeddings-tooltip-title');
+const embeddings_description = embeddings_tooltip.select('#embeddings-tooltip-description');
 
 function show_tooltip(data) {
-    embeddings_tooltip.text('r/' + data[0]);
+    embeddings_title.text('r/' + data[0]);
+    embeddings_thumbnail.attr("src", data[3]);
+    embeddings_description.text(data[4]);
+
     embeddings_tooltip.style("opacity", "100%");
 }
 
