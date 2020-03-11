@@ -36,7 +36,8 @@
 }
 
 
-/* SHOULDN'T BE THERE */
+
+/* SHOULDN'T BE THERE, MAKE ITS OWN FILE */
 body {
     margin: auto;
     width: 885px;
