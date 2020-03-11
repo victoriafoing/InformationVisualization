@@ -1,4 +1,4 @@
-function activity_timeline(data) {
+function activity_timeline(data, subreddit) {
 
     // Get sentiment categories
     var keys = Object.keys(data[0]).slice(1)
@@ -68,6 +68,16 @@ function activity_timeline(data) {
 		.attr("width", width - margin.right - margin.left)
 		.attr("height", height)
 
+    var title = svg.selectAll(".myText").data([subreddit])
+    title.exit().remove();
+    title.enter().append("text")
+        .attr("class","myText")
+        .attr("x",width/4)
+        .attr("y",margin.top)
+        .attr("font-size",30)
+        .attr("text-anchor","left");
+    title.text(function(d) { return d; });
+
     // Update activity timeline based on selection box
 	update(d3.select('#selectbox').property('value'), 0);
 
@@ -83,6 +93,7 @@ function activity_timeline(data) {
 				values: data.map(d => {return {date: d.date, count: +d[id]}})
 			};
 		});
+
 
         // Format Y-axis based on filtered data
 		y.domain([
@@ -105,6 +116,25 @@ function activity_timeline(data) {
 			.merge(sentiment)
 		.transition().duration(speed)
 			.attr("d", d => line(d.values))
+
+        var activity_type = ""
+        if (input == "_source") {
+            activity_type = "Outgoing"
+        }
+        else if (input == "_target") {
+            activity_type = "Incoming"
+        }
+
+        // Update title of plot
+        var title = svg.selectAll(".myText").data([activity_type+" Activity for r/"+subreddit])
+        title.exit().remove();
+        title.enter().append("text")
+            .attr("class","myText")
+            .attr("x",width/4)
+            .attr("y",margin.top)
+            .attr("font-size",30)
+            .attr("text-anchor","left");
+        title.text(function(d) { return d; });
 
 		tooltip(filtered);
 
