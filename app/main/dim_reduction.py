@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 
 import numpy as np
 import pandas as pd
@@ -28,7 +28,7 @@ def embedding_to_np_matrix(df: Union[str, pd.DataFrame]) -> np.array:
 def dim_reduct(embedding_df: Union[str, pd.DataFrame],
                dim=2,
                perplexity=30,
-               timing=False) -> dict:
+               timing=False) -> List[tuple]:
     names, array = embedding_to_np_matrix(embedding_df)
     reductor = TSNE(dim, perplexity=perplexity)
 
@@ -41,18 +41,34 @@ def dim_reduct(embedding_df: Union[str, pd.DataFrame],
     if timing:
         print(f'Projection took {round(time.time() - start, 1)}s\n')
 
-    embeddings = []
+    projections = []
     for name, proj in zip(names, array):
         proj = list(map(float, proj))
-        embeddings.append((name, proj[0], proj[1]))
+        projections.append((name, proj[0], proj[1]))
 
-    return embeddings
+    return projections
+
+
+def merge_thumbnails_descriptions(projections: List[tuple],
+                                  thumb_description_file: str) -> List[tuple]:
+    df = pd.read_csv(thumb_description_file, index_col='SUBREDDIT_ID')
+
+    for i, projection in enumerate(projections):
+        thumbnail = df.loc[projection[0], "THUMBNAILS"]
+        description = df.loc[projection[0], "PUBLIC_DESCRIPTIONS"]
+
+        projections[i] = (*projection, thumbnail, description)
+
+    return projections
 
 
 if __name__ == '__main__':
     projections = dim_reduct('../data/reddit-embedding-filtered.csv')
-    for name, proj in projections.items():
-        print(name, proj)
-    
+    # for name, proj in projections.items():
+    #     print(name, proj)
+
+    embeddings_info = merge_thumbnails_descriptions(
+        projections, '../data/reddit-embedding-thumbnail-description.csv')
+
     # import json
     # print(json.dumps(projections))
