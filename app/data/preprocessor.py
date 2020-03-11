@@ -100,7 +100,7 @@ def fetch_thumbnails_description(outfile: str, n: int) -> None:
             icon_imgs.append(sr_info['icon_img'])
             public_descriptions.append(sr_info['public_description'])
 
-        elif sr_info.status_code == 403 or sr_info.status_code == 404:
+        elif sr_info.status_code in [403, 404]:
             sr_info = sr_info.json()
 
             community_icons.append(

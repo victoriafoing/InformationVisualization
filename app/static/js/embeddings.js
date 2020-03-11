@@ -29,7 +29,7 @@ async function draw_embeddings(width, height) {
 
 
     // Add nodes
-    svg.selectAll("nodes")
+    svg.selectAll()
         .data(embeddings)
         .enter()
         .append("circle")

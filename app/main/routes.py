@@ -47,23 +47,3 @@ def get_embeddings():
 def test(url):
     url = 'https://www.reddit.com/r/' + url + '/about.json'
     return requests.get(url, headers={'User-agent': 'Reddit Vis'}).text
-
-
-# @main.route('/d3', methods=['GET', 'POST'])
-# def d3():
-#     area_name = request.args.get("area_name")
-
-#     if area_name is None:
-#         area_name = "Centrum-West"
-
-#     plot_data = data.stats_ams.loc[data.stats_ams['area_name'] == area_name]
-#     plot_data = plot_data.drop(['area_name', 'area_code'], axis=1)
-#     plot_data = plot_data.to_json(orient='records')
-
-#     meta_data = data.stats_ams_meta.to_json(orient='records')
-#     return render_template("d3.html",
-#                            data=plot_data,
-#                            meta_data=meta_data,
-#                            x_variables=data.model_vars,
-#                            area_names=data.area_names,
-#                            selected_area_name=area_name)
