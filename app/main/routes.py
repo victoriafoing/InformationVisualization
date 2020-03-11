@@ -5,7 +5,7 @@ import requests
 from app import data
 from . import main
 from .dataloader import load_csv, load_fake_data, get_timeline_data, calc_stats_for_month_year, \
-    get_most_hated_loved_subreddits_by_month_year, get_top_5
+    get_most_hated_loved_subreddits_by_month_year, get_top_5, get_top_5_both_sent, get_activity
 from .dim_reduction import dim_reduct, merge_thumbnails_descriptions
 
 import json
@@ -34,13 +34,21 @@ def get_data_by_month_year(month, year):
 
 @main.route("/top/<year>/<month>", methods=['GET'])
 def get_top_subreddits_by_month_year(month, year):
-    data = get_top_5(current_app.df, month, year, False, False)
+    data = get_top_5_both_sent(current_app.df, month, year, False)
+    print(data)
     return json.dumps(data)
 
 
 @main.route("/data", methods=['GET'])
 def get_data():
     data = get_timeline_data(current_app.df)
+    return json.dumps(data)
+
+
+@main.route("/activity/<subreddit>", methods=['GET'])
+def get_subreddit_activity(subreddit):
+
+    data = get_activity(current_app.df, subreddit)
     return json.dumps(data)
 
 
@@ -52,4 +60,7 @@ def get_embeddings():
 @main.route("/reddit-info/<url>", methods=['GET'])
 def test(url):
     url = 'https://www.reddit.com/r/' + url + '/about.json'
-    return requests.get(url, headers={'User-agent': 'Reddit Visualization Project'}).text
+    return requests.get(url,
+                        headers={
+                            'User-agent': 'Reddit Visualization Project'
+                        }).text

@@ -4,7 +4,7 @@ import pandas as pd
 def load_csv(file: str):
     ext = file[-3:]
     if ext == 'tsv':
-        df = pd.read_csv(file, delimiter='\t', index_col=0)
+        df = pd.read_csv(file, delimiter='\t')
 
     elif ext == 'csv':
         df = pd.read_csv(file)
@@ -86,33 +86,49 @@ def calc_stats_for_month_year(df, month, year):
 #     df_src = pd.DataFrame(store.items(), columns=['Sr', 'Sent_count'])
 #     return df_src.nlargest(5, 'Sent_count')
 
+def get_top_5_both_sent(df, month, year, is_tar: bool, n=5, min_count = 1000):
+    good = get_top_5(df, month, year, True, is_tar=is_tar, n=n, min_count=min_count)
+    bad = get_top_5(df, month, year, False, is_tar=is_tar, n=n, min_count=min_count)
+    return {
+        "loved" : good,
+        "hated" : bad
+    }
 
-def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5):
+def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5, min_count = 1000):
     '''
     :param sent: True for positive, False for negative sentiment
-    :param is_tar: 
+    :param is_tar:
     '''
-    if sent:
-        df = df[df['LINK_SENTIMENT'] > 0]
-    else:
-        df = df[df['LINK_SENTIMENT'] < 0]
-        df['LINK_SENTIMENT'] = df['LINK_SENTIMENT'] * -1
-
-    filtered_df = filter_year(int(year), filter_month(int(month), df))
-
     if is_tar:
         direction = 'TARGET_SUBREDDIT'
     else:
         direction = 'SOURCE_SUBREDDIT'
 
+    # Filter subreddits that dont appear often
+    v = df[direction].value_counts()
+    df_big = df[df[direction].isin(v.index[v.gt(min_count)])]
+
+    if sent:
+        df_big = df_big[df_big['LINK_SENTIMENT'] > 0]
+    else:
+        df_big = df_big[df_big['LINK_SENTIMENT'] < 0]
+        df_big['LINK_SENTIMENT'] = df_big['LINK_SENTIMENT'] * -1
+
+    filtered_df = filter_year(int(year), filter_month(int(month), df_big))
+
+
     grouped = list(
-        filtered_df.groupby(direction)
-        ['LINK_SENTIMENT'].sum().sort_values().items())
-    top = grouped[-n:]
-    return {
-        "names": [ele[0] for ele in top],  # lol,the_donald,etc
-        "count": [ele[1] for ele in top]  # 150, 112, etc
-    }
+        filtered_df.groupby(direction)['LINK_SENTIMENT']
+                   .sum()
+                   .sort_values()
+                   .items()
+    )
+    grouped = sorted(list(map(lambda x: (x[0],x[1]/v[x[0]]),grouped)),key= lambda tup: tup[1], reverse=True)
+    top = grouped[:n]
+    return [{
+        "name" : ele[0],
+        "count" : round(ele[1],3)
+    } for ele in top]
 
 
 def get_most_hated_loved_subreddits_by_month_year(df, month, year):
@@ -133,6 +149,43 @@ def get_most_hated_loved_subreddits_by_month_year(df, month, year):
         }
     }
 
+def get_activity(df, subreddit):
+
+    temp = df.copy()
+
+    # Add time categories for grouping
+    temp["Date"] = temp["TIMESTAMP"].astype(str).str.split(expand=True)[0]
+    temp['Year-Month'] = temp["Date"].str[:7]
+
+    # Add sentiment categories to facilitate sums
+    temp['pos_source'] = ((df.SOURCE_SUBREDDIT == subreddit) & (df.LINK_SENTIMENT == 1)).map(
+        {True: 1, False: 0})
+    temp['neg_source'] = ((df.SOURCE_SUBREDDIT == subreddit) & (df.LINK_SENTIMENT == -1)).map(
+        {True: 1, False: 0})
+    temp['pos_target'] = ((df.TARGET_SUBREDDIT == subreddit) & (df.LINK_SENTIMENT == 1)).map(
+        {True: 1, False: 0})
+    temp['neg_target'] = ((df.TARGET_SUBREDDIT == subreddit) & (df.LINK_SENTIMENT == -1)).map(
+        {True: 1, False: 0})
+
+    # Group table by year-month and calculate sums for sentiment categories
+    activity = temp.groupby('Year-Month')[['pos_source', 'neg_source', 'pos_target', 'neg_target']].sum()
+
+    dates = list(activity.groupby('Year-Month').groups.keys())
+
+    # Convert grouped sums to lists
+    pos_source = list(activity['pos_source'])
+    neg_source = list(activity['neg_source'])
+    pos_target = list(activity['pos_target'])
+    neg_target = list(activity['neg_target'])
+
+    # Return list of dictionaries (one dictionary for each time point)
+    return [{
+        "date": dates[i],
+        "pos_source": pos_source[i],
+        "neg_source": neg_source[i],
+        "pos_target": pos_target[i],
+        "neg_target": neg_target[i],
+    } for i in range(0,len(dates))]
 
 if __name__ == '__main__':
 
