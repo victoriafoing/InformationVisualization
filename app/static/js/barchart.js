@@ -90,7 +90,7 @@ fetch(fetch_url)
                     .then(function (response) {
                         return response.json();
                     })
-                    .then((data) => activity_timeline(data))
+                    .then((data) => activity_timeline(data, d.name))
               });
 
 
@@ -105,7 +105,7 @@ fetch(fetch_url)
                     .then(function (response) {
                         return response.json();
                     })
-                    .then((data) => activity_timeline(data))
+                    .then((data) => activity_timeline(data, d.name))
             });
 
 
