@@ -84,8 +84,7 @@ def fetch_thumbnails_description(outfile: str, n: int) -> None:
     most_active = most_active_sr('reddit-body-filtered.tsv',
                                  'reddit-title-filtered.tsv', n)
 
-    community_icons = []
-    icon_imgs = []
+    thumbnails = []
     public_descriptions = []
 
     for sr in most_active:
@@ -96,17 +95,26 @@ def fetch_thumbnails_description(outfile: str, n: int) -> None:
         if sr_info.status_code == 200:
             sr_info = sr_info.json()['data']
 
-            community_icons.append(sr_info['community_icon'])
-            icon_imgs.append(sr_info['icon_img'])
+            community_icon = sr_info['community_icon']
+            icon_img = sr_info['icon_img']
+
+            if community_icon != '':
+                thumbnails.append(community_icon)
+            elif icon_img != '':
+                thumbnails.append(icon_img)
+            else:
+                thumbnails.append(
+                    'https://styles.redditmedia.com/t5_6/styles/communityIcon_a8uzjit9bwr21.png'
+                )
+
             public_descriptions.append(sr_info['public_description'])
 
         elif sr_info.status_code in [403, 404]:
             sr_info = sr_info.json()
 
-            community_icons.append(
+            thumbnails.append(
                 'https://styles.redditmedia.com/t5_6/styles/communityIcon_a8uzjit9bwr21.png'
             )
-            icon_imgs.append(None)
             public_descriptions.append(
                 f"data not found because the subreddit is {sr_info['reason']}")
             print(f"data not found for {sr} because it is {sr_info['reason']}")
@@ -118,17 +126,16 @@ def fetch_thumbnails_description(outfile: str, n: int) -> None:
 
     df = pd.Index(most_active, name='SUBREDDIT_ID')
     df = pd.DataFrame(index=df)
-    df['COMMUNITY_ICON'] = community_icons
-    df['ICON_IMG'] = icon_imgs
+    df['THUMBNAILS'] = thumbnails
     df['PUBLIC_DESCRIPTIONS'] = public_descriptions
 
     df.to_csv(outfile)
 
 
 if __name__ == '__main__':
-    import os.path
-
     from utils import most_active_sr
+
+    import os.path
 
     if not os.path.exists('reddit-body.tsv'):
         transform_properties('soc-redditHyperlinks-body.tsv',
