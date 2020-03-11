@@ -12,7 +12,8 @@ function show_tooltip(data) {
 }
 
 function move_tooltip() {
-    embeddings_tooltip.style("left", d3.event.clientX - 50 + "px");
+    const tooltip_width = document.getElementById("embeddings-tooltip").offsetWidth;
+    embeddings_tooltip.style("left", `${d3.event.clientX - (tooltip_width / 2)}px`);
     embeddings_tooltip.style("top", d3.event.clientY + 50 + "px");
 }
 
