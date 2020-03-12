@@ -172,26 +172,26 @@ function drawPlot(data) {
 
 
 function update(h) {
-  // update position and text of label according to slider scale
-  handle.attr("cx", x(h));
-  label
-    .attr("x", x(h))
-    .text(formatDate(h));
+    // update position and text of label according to slider scale
+    handle.attr("cx", x(h));
+    label
+        .attr("x", x(h))
+        .text(formatDate(h));
 
-  console.log(formatDateM(h))
-  // filter data set and redraw plot
-  var newData = dataset.filter(function(d) {
-    
-    return d.date = h;
-  })
-  // var fetch_url = '/top/2015/02';
-  var fetch_url = formatDate4bar(h)
-  fetch(fetch_url)
-    .then(function (response) {
-        return response.json();
+    console.log(formatDateM(h))
+    // filter data set and redraw plot
+    var newData = dataset.filter(function (d) {
+
+        return d.date = h;
     })
-    .then((data) => bar_chart(data))
-  //drawPlot(newData);
+    // var fetch_url = '/top/2015/02';
+    var fetch_url = formatDate4bar(h)
+    fetch(fetch_url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then((data) => bar_chart(data))
+    //drawPlot(newData);
 }
 
 function bar_chart(data) {
