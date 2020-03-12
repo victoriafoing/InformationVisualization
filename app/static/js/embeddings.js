@@ -9,6 +9,7 @@ async function draw_embeddings(width, height) {
         .attr("height", height)
         .on("mousemove", move_tooltip);
 
+
     // Computing scale
     const xs = [];
     const ys = [];
