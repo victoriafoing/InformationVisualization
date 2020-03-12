@@ -161,10 +161,10 @@ function update(h) {
 
   console.log(formatDateM(h))
   // filter data set and redraw plot
-  //var newData = dataset.filter(function(d) {
+  var newData = dataset.filter(function(d) {
     
-    //return d.date = h;
-  //})
+    return d.date = h;
+  })
   // var fetch_url = '/top/2015/02';
   var fetch_url = formatDate4bar(h)
   fetch(fetch_url)
