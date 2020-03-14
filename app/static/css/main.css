@@ -1,7 +1,11 @@
 html, body {
   height: 100%;
   margin: 0;
-  background-color: #DAE0E6;
+ /* background-color: #DAE0E6;*/
+ background-color: #101010;
+ font-family: "Bahnschrift";
+ color: white;
+ /*font-weight: bold;*/
 }
 .grid2x2 {
   min-height: 100%;
@@ -21,4 +25,19 @@ html, body {
   flex-direction: row;
 }
 
-.box { margin: 20px; height: 800px; width: 1000px; background-color: white; opacity: 0.8; border-radius: 20px;}
+.box {
+    margin: 20px;
+    height: 800px;
+    width: 1000px;
+    background-color: #282828;
+    opacity: 1.0;
+    border-radius: 20px;
+}
+
+.comment {
+    background-color: #E6E6FA;
+    opacity: 0.75;
+    width: 65%;
+    margin: auto;
+    border-radius: 5px;
+}

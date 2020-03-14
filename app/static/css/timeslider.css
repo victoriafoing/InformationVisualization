@@ -1,6 +1,5 @@
 body {
-    font-family: "avenir next", Arial, sans-serif;
-    font-size: 12px;
+    font-size: 18px;
     color: #696969;
 }
 
@@ -9,7 +8,7 @@ body {
     border-radius: 3px;
     border: none;
     color: white;
-    width: 50px;
+    width: 65px;
     cursor: pointer;
     height: 30px;
 }
@@ -27,6 +26,7 @@ body {
 
 .ticks {
     font-size: 10px;
+    color: white;
 }
 
 .track,

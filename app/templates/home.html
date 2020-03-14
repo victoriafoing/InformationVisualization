@@ -15,7 +15,7 @@
     <!-- Slider and Barchart -->
     <div class="box box1">
                 <div class="bar"><svg id="barchart" width="800" height="400"></svg></div>
-                <div class="mt-3 bar" id="timeslider"><button id="play-button">Play</button></div>
+                <div id="timeslider"><button id="play-button">Play</button></div>
                 <script type="text/javascript" src="../static/js/activity.js"></script>
                 <script type="text/javascript" src="../static/js/barchart.js" charset="utf-8"></script>
             <link rel="stylesheet" href="../static/css/timeslider.css">
@@ -38,11 +38,11 @@
 
     <!-- Activity timeline -->
     <div class="box box2">
-            <div class="">
+            <div class="timeline">
                 <svg id="activity" width="800" height="400"></svg>
             </div>
-            <div class="">
-                <font style="font-size:11px;">Direction of Hyperlinks:</font>
+            <div class="selections">
+                <font>Direction of Hyperlinks: </font>
                 <select id="selectbox">
                     <option value="_source">Outgoing</option>
                     <option value="_target">Incoming</option>
@@ -55,14 +55,15 @@
 
       <!-- Comments -->
       <div class="box box4">
-          <div></div>
           <!-- Example of Reddit Card. Here I want to sample from our set to display an example. Wolf -->
-          <blockquote style="color:white;" class="reddit-card" data-card-created="1582734801">
-              <a style="color:white;" href="https://www.reddit.com/r/conspiracy/comments/34wxgc/come_look_at_all_the_brainwashed_idiots_in/">
-              Come look at all the brainwashed idiots in r/Documentaries</a> from
-              <a style="color:white;" href="http://www.reddit.com/r/conspiracy">r/conspiracy</a>
+          <div class="comment">
+          <blockquote class="reddit-card" data-card-created="1582734801">
+              <a href="https://www.reddit.com/r/conspiracy/comments/34wxgc/come_look_at_all_the_brainwashed_idiots_in/">
+                 Come look at all the brainwashed idiots in r/Documentaries</a> from
+              <a href="http://www.reddit.com/r/conspiracy">r/conspiracy</a>
           </blockquote>
             <script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
+          </div>
       </div>
 </div>
 
