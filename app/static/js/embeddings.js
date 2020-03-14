@@ -15,9 +15,9 @@ async function draw_embeddings(width, height) {
     const ys = [];
     const margin = 0.1;
 
-    embeddings.forEach(emb => {
-        xs.push(emb[1]);
-        ys.push(emb[2]);
+    embeddings.forEach(d => {
+        xs.push(d[1]);
+        ys.push(d[2]);
     });
 
     const x = d3.scaleLinear()
@@ -28,6 +28,16 @@ async function draw_embeddings(width, height) {
         .domain([Math.min(...ys), Math.max(...ys)])
         .range([(1 - margin) * height, margin * height]);
 
+
+    // Add labels
+    const labels = svg.selectAll()
+        .data(embeddings)
+        .enter()
+        .append("text")
+        .attr("class", "embedding-label")
+        .attr("x", d => x(d[1]))
+        .attr("y", d => y(d[2]))
+        .text(d => d[0]);
 
     // Add nodes
     const circle_radius = 6;
@@ -47,6 +57,7 @@ async function draw_embeddings(width, height) {
     // Zoom behaviour
     const scale_attenuation = 5;
     const max_zoom = 8;
+    const label_zoom_treshold = 2.5;
 
     const zoomed = function () {
         const transform = d3.event.transform;
@@ -54,9 +65,22 @@ async function draw_embeddings(width, height) {
         const ty = transform.y;
         const k = transform.k;
 
-        circles.attr("cx", d => k * x(d[1]) + tx);
-        circles.attr("cy", d => k * y(d[2]) + ty);
-        circles.attr("r", (1 + (k - 1) / scale_attenuation) * circle_radius);
+        // Labels
+        if (k > label_zoom_treshold) {
+            const label_opacity = Math.min(2 * (k - label_zoom_treshold) / (max_zoom - label_zoom_treshold) * 100, 100);
+            labels.attr("x", d => k * x(d[1]) + tx)
+                .attr("y", d => k * y(d[2]) + ty)
+                .style("opacity", label_opacity + '%')
+                .text(d => d[0]);
+        } else {
+            labels.text("");
+        }
+
+        // Circles
+        const new_r = (1 + (k - 1) / scale_attenuation) * circle_radius;
+        circles.attr("cx", d => k * x(d[1]) + tx)
+            .attr("cy", d => k * y(d[2]) + ty)
+            .attr("r", new_r);
     }
 
     svg.call(

@@ -42,3 +42,8 @@
     fill-opacity: 100%;
     transition: fill-opacity var(--transition-duration);
 }
+
+.embedding-label {
+    fill: #ffffff;
+    opacity: 0%;
+}
