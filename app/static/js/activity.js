@@ -74,8 +74,6 @@ function activity_timeline(data, subreddit) {
         .attr("class","myText")
         .attr("x",width/4)
         .attr("y",margin.top)
-        .attr("font-size",30)
-        .attr("text-anchor","left");
     title.text(function(d) { return d; });
 
     // Update activity timeline based on selection box
@@ -132,8 +130,6 @@ function activity_timeline(data, subreddit) {
             .attr("class","myText")
             .attr("x",width/4)
             .attr("y",margin.top)
-            .attr("font-size",30)
-            .attr("text-anchor","left");
         title.text(function(d) { return d; });
 
 		tooltip(filtered);
@@ -190,7 +186,7 @@ function activity_timeline(data, subreddit) {
 			focus.selectAll(".lineHoverText")
 				.attr("transform",
 					"translate(" + (x(d.date)) + "," + height / 2.5 + ")")
-				.text(e => e + " " + "º" + formatValue(d[e]));
+				.text(e => e + ": " + formatValue(d[e]));
 
 			x(d.date) > (width - width / 4)
 				? focus.selectAll("text.lineHoverText")

@@ -11,6 +11,7 @@ var margin = {top: 150, right:50, bottom:0, left:50},
 
 var svg = d3.select("#timeslider")
     .append("svg")
+    .attr("fill","#696969")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);  
 
@@ -87,6 +88,7 @@ fetch(fetch_url)
 
         var label = slider.append("text")  
             .attr("class", "label")
+            .attr("fill", "white")
             .attr("text-anchor", "middle")
             .text(formatDate(startDate))
             .attr("transform", "translate(0," + (-25) + ")")

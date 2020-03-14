@@ -10,7 +10,6 @@
 <link rel="stylesheet" type="text/css" href="../static/css/main.css">
 
 <div id="visualization-grid">
-
     <!-- Slider and Barchart -->
     <div class="visualization-view" id="view-slider-barchart">
         <div class="bar">
@@ -45,11 +44,11 @@
 
     <!-- Activity timeline -->
     <div class="visualization-view" id="view-activity">
-        <div>
+        <div class="timeline">
             <svg id="activity" width="800" height="400"></svg>
         </div>
-        <div>
-            <font style="font-size:11px;">Direction of Hyperlinks:</font>
+        <div class="selections">
+            <font>Direction of Hyperlinks: </font>
             <select id="selectbox">
                 <option value="_source">Outgoing</option>
                 <option value="_target">Incoming</option>
@@ -61,12 +60,14 @@
 
     <!-- Comments -->
     <div class="visualization-view" id="view-comments">
-        <blockquote style="color:white;" class="reddit-card" data-card-created="1582734801">
-            <a style="color:white;"
-                href="https://www.reddit.com/r/conspiracy/comments/34wxgc/come_look_at_all_the_brainwashed_idiots_in/">
-                Come look at all the brainwashed idiots in r/Documentaries</a> from
-            <a style="color:white;" href="http://www.reddit.com/r/conspiracy">r/conspiracy</a>
-        </blockquote>
+        <div class="comment">
+            <blockquote class="reddit-card" data-card-created="1582734801">
+                <a
+                    href="https://www.reddit.com/r/conspiracy/comments/34wxgc/come_look_at_all_the_brainwashed_idiots_in/">
+                    Come look at all the brainwashed idiots in r/Documentaries</a> from
+                <a href="http://www.reddit.com/r/conspiracy">r/conspiracy</a>
+            </blockquote>
+        </div>
     </div>
 
     <script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>

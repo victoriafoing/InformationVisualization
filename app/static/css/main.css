@@ -1,13 +1,14 @@
 body {
-  height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #DAE0E6;
   justify-content: center;
+
+  background-color: #101010;
+  font-family: "Bahnschrift";
 }
 
+
 #visualization-grid {
-  height: 95%;
   width: 95%;
   margin: auto;
 
@@ -21,7 +22,7 @@ body {
 }
 
 .visualization-view {
-  background-color: white;
+  background-color: #202020;
 
   border-radius: 20px;
   justify-self: stretch;
@@ -46,4 +47,22 @@ body {
 
 #view-comments {
   grid-area: comments;
+}
+
+
+.box {
+  margin: 20px;
+  height: 800px;
+  width: 1000px;
+  background-color: #282828;
+  opacity: 1.0;
+  border-radius: 20px;
+}
+
+.comment {
+  background-color: #E6E6FA;
+  opacity: 0.75;
+  width: 65%;
+  margin: auto;
+  border-radius: 5px;
 }

@@ -26,9 +26,9 @@
             text-justify: inter-word;
         }
 
-        .bar:hover {
+        /*.bar:hover {
             fill: brown;
-        }
+        }*/
 
         .axis {
             font: 10px sans-serif;
@@ -55,7 +55,7 @@
         }
 
         body {
-            font-family: "Arial", sans-serif;
+            /*font-family: "Arial", sans-serif;*/
             position: relative;
         }
 
@@ -79,14 +79,15 @@
 
         .label {
             font-size: 13px;
+            fill: white;
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md" id="navbar-top">
+    <!-- <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md" id="navbar-top">
         <a class="navbar-brand col-1" id="title" href="#">Information Visualization 2020</a>
-    </nav>
+    </nav> -->
     <div class="tooltip" id="tooltip"></div>
     {% block body %}
     {% endblock %}
