@@ -5,8 +5,8 @@ socket.on('connect', function () {
 });
 
 /// Here goes the timeslider
-var margin = {top:150, right:50, bottom:0, left:50},
-    width = 960 - margin.left - margin.right,
+var margin = {top: 150, right:50, bottom:0, left:50},
+    width = 700 - margin.left - margin.right,
     height = 100 - margin.top - margin.bottom;
 
 var svg = d3.select("#timeslider")
@@ -249,12 +249,6 @@ fetch(fetch_url)
                     return d.count;
                 });
 
-            svg.append("text")
-                .attr("class", "title")
-                .attr("x", (width / 2))
-                .attr("y", margin.top)
-                .attr("text-anchor", "middle")
-                .text("Interactive timeline");
         }
 
         makeBars(data);

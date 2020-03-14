@@ -5,17 +5,11 @@ body {
 }
 
 #play-button {
-    position: absolute;
-    top: 650px;
-    left: 240px;
     background: #f08080;
-    padding-right: 26px;
     border-radius: 3px;
     border: none;
     color: white;
-    margin: auto;
-    padding: 0 12px;
-    width: 50%;
+    width: 50px;
     cursor: pointer;
     height: 30px;
 }
