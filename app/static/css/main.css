@@ -1,24 +1,49 @@
-html, body {
+body {
   height: 100%;
   margin: 0;
+  padding: 0;
   background-color: #DAE0E6;
-}
-.grid2x2 {
-  min-height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-}
-.grid2x2 > div {
-  display: flex;
-  flex-basis: calc(50% - 40px);
   justify-content: center;
-  flex-direction: column;
-}
-.grid2x2 > div > div {
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
 }
 
-.box { margin: 20px; height: 800px; width: 1000px; background-color: white; opacity: 0.8; border-radius: 20px;}
+#visualization-grid {
+  height: 95%;
+  width: 95%;
+  margin: auto;
+
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "barchart embeddings"
+    "activity comments";
+  grid-gap: 30px;
+}
+
+.visualization-view {
+  background-color: white;
+
+  border-radius: 20px;
+  justify-self: stretch;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+#view-slider-barchart {
+  grid-area: barchart;
+}
+
+#view-embeddings {
+  grid-area: embeddings;
+}
+
+#view-activity {
+  grid-area: activity;
+}
+
+#view-comments {
+  grid-area: comments;
+}

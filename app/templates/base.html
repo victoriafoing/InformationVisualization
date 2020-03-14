@@ -84,16 +84,12 @@
 </head>
 
 <body>
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md" id="navbar-top">
-    <a class="navbar-brand col-1" id="title" href="#">Information Visualization 2020</a>
-</nav>
-<main role="main" class="flex-shrink-0">
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap navbar-expand-md" id="navbar-top">
+        <a class="navbar-brand col-1" id="title" href="#">Information Visualization 2020</a>
+    </nav>
     <div class="tooltip" id="tooltip"></div>
-    <div class="container-flui col-lg-8 offset-lg-2" id="main-content-container">
-        {% block body %}
-        {% endblock %}
-    </div>
-</main>
+    {% block body %}
+    {% endblock %}
 </body>
 
 </html>
