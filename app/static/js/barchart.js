@@ -38,9 +38,6 @@ var slider = svg.append("g")
     .attr("class", "slider")
     .attr("transform", "translate(" + margin.left + "," + (height+margin.top/2) + ")");
 
-var barsLeft = svg.selectAll(".bar");
-var barsRight = svg.selectAll(".bargood");
-
 var fetch_url = '/top/2016/02';
 fetch(fetch_url) 
     .then(function (response) {
@@ -100,11 +97,11 @@ fetch(fetch_url)
         // var width = 2 * 960 - margin.left - margin.right + 200,
         //height = 500 - margin.top - margin.bottom;
         var svg = d3.select("#barchart"),
-            margin = {top: 35, right: 55, bottom: 15, left: 35},
+            margin = {top: 35, right: 40, bottom: 15, left: 125},
             width = +svg.attr("width") - margin.left - margin.right,
             height = +svg.attr("height") - margin.top - margin.bottom;
 
-        var spread = 40;
+        var spread = 120;
         // Create svg
         /*var svg = d3.select("body").append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -151,12 +148,12 @@ fetch(fetch_url)
                 .scale(yRight)
                 .tickSize(0);
 
-            var gy = svg.append("g")
+            var gyl = svg.append("g")
                 .attr("class", "y axis")
-                .attr("transform", "translate(" + -width + ", 0)")
+                .attr("transform", "translate(" + 100 + ", 0)")
                 .call(yAxisLeft);
 
-            var gy = svg.append("g")
+            var gyr = svg.append("g")
                 .attr("class", "y axis")
                 .attr("transform", "translate(" + width + ", 0)")
                 .call(yAxisRight);
@@ -203,7 +200,7 @@ fetch(fetch_url)
                     return yLeft(d.name);
                 })
                 .attr("height", yLeft.bandwidth())
-                .attr("x", 0)
+                .attr("x", 100)
                 .attr("width", function (d) {
                     return xLeft(d.count);
                 });
@@ -217,7 +214,7 @@ fetch(fetch_url)
                 })
                 //x position is 3 pixels to the right of the bar
                 .attr("x", function (d) {
-                    return xLeft(d.count) + 3;
+                    return xLeft(d.count) + 110;
                 })
                 .text(function (d) {
                     return d.count;
@@ -311,8 +308,8 @@ fetch(fetch_url)
       function updateBars(data) {
           barsLeft.remove().exit();
           barsRight.remove().exit();
-
+          svg.selectAll(".axis").remove();
           makeBars(data);
         }
         
-    })
+    });
