@@ -12,6 +12,7 @@
 <div id="visualization-grid">
     <!-- Slider and Barchart -->
     <div class="visualization-view" id="view-slider-barchart">
+        <h2> Positive/negative post sentiment % </h2>
         <div class="bar">
             <svg id="barchart" width="800" height="400"></svg>
         </div>
@@ -26,6 +27,7 @@
 
     <!-- Emmbeddings -->
     <div class="visualization-view" id="view-embeddings">
+        <h2> Subreddit embeddings </h2>
         <div id="embeddings"></div>
     </div>
 
@@ -44,6 +46,7 @@
 
     <!-- Activity timeline -->
     <div class="visualization-view" id="view-activity">
+        <h2> Activity Timeline </h2>
         <div class="timeline">
             <svg id="activity" width="800" height="400"></svg>
         </div>
@@ -60,14 +63,17 @@
 
     <!-- Comments -->
     <div class="visualization-view" id="view-comments">
+        <h2> Sample post </h2>
         <div class="comment">
             <blockquote class="reddit-card" data-card-created="1582734801">
-                <a
+                <a id="post"
                     href="https://www.reddit.com/r/conspiracy/comments/34wxgc/come_look_at_all_the_brainwashed_idiots_in/">
                     Come look at all the brainwashed idiots in r/Documentaries</a> from
                 <a href="http://www.reddit.com/r/conspiracy">r/conspiracy</a>
             </blockquote>
+            <script type="text/javascript" src="../static/js/postsample.js"></script>
         </div>
+
     </div>
 
     <script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>

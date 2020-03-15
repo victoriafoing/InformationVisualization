@@ -14,10 +14,10 @@ var startDate = new Date("2015-01"),
     endDate = new Date("2015-12");
 
 var margin = {
-        top: 150,
+        top: 100,
         right: 50,
         bottom: 0,
-        left: 50
+        left: 25
     },
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -42,7 +42,7 @@ var x = d3.scaleTime()
 
 var slider = svg.append("g")
     .attr("class", "slider")
-    .attr("transform", "translate(" + margin.left + "," + height / 5 + ")");
+    .attr("transform", "translate(" + margin.left + "," + height / 6 + ")");
 
 slider.append("line")
     .attr("class", "track")
@@ -88,7 +88,7 @@ var label = slider.append("text")
     .attr("class", "label")
     .attr("text-anchor", "middle")
     .text(formatDate(startDate))
-    .attr("transform", "translate(0," + (-25) + ")")
+    .attr("transform", "translate(0," + (+25) + ")")
 
 
 ////////// plot //////////
@@ -127,6 +127,7 @@ fetch(fetch_url)
     .then((data) => bar_chart(data))
   
   playButton
+
     .on("click", function() {
     var button = d3.select(this);
     if (button.text() == "Pause") {

@@ -5,7 +5,7 @@ import requests
 from app import data
 from . import main
 from .dataloader import load_csv, load_fake_data, get_timeline_data, calc_stats_for_month_year, \
-    get_most_hated_loved_subreddits_by_month_year, get_top_5, get_top_5_both_sent, get_activity
+    get_most_hated_loved_subreddits_by_month_year, get_top_5, get_top_5_both_sent, get_activity, sample_post
 from .dim_reduction import dim_reduct, merge_thumbnails_descriptions
 
 import json
@@ -64,3 +64,8 @@ def test(url):
                         headers={
                             'User-agent': 'Reddit Visualization Project'
                         }).text
+
+@main.route("/sample/<subreddit>/<sent>", methods=['GET'])
+def get_sample(subreddit, sent):
+    data = sample_post(current_app.df, subreddit, sent)
+    return json.dumps(data)

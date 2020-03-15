@@ -86,7 +86,7 @@ def calc_stats_for_month_year(df, month, year):
 #     df_src = pd.DataFrame(store.items(), columns=['Sr', 'Sent_count'])
 #     return df_src.nlargest(5, 'Sent_count')
 
-def get_top_5_both_sent(df, month, year, is_tar: bool, n=5, min_count = 1000):
+def get_top_5_both_sent(df, month, year, is_tar: bool, n=5, min_count = 25):
     good = get_top_5(df, month, year, True, is_tar=is_tar, n=n, min_count=min_count)
     bad = get_top_5(df, month, year, False, is_tar=is_tar, n=n, min_count=min_count)
     return {
@@ -94,19 +94,22 @@ def get_top_5_both_sent(df, month, year, is_tar: bool, n=5, min_count = 1000):
         "hated" : bad
     }
 
-def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5, min_count = 1000):
+def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5, min_count = 100):
     '''
     :param sent: True for positive, False for negative sentiment
     :param is_tar:
     '''
+
+    filtered_df = filter_year(int(year), filter_month(int(month), df))
+
     if is_tar:
         direction = 'TARGET_SUBREDDIT'
     else:
         direction = 'SOURCE_SUBREDDIT'
 
     # Filter subreddits that dont appear often
-    v = df[direction].value_counts()
-    df_big = df[df[direction].isin(v.index[v.gt(min_count)])]
+    v = filtered_df[direction].value_counts()
+    df_big = filtered_df[filtered_df[direction].isin(v.index[v.gt(min_count)])]
 
     if sent:
         df_big = df_big[df_big['LINK_SENTIMENT'] > 0]
@@ -114,11 +117,10 @@ def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5, min_count = 1000):
         df_big = df_big[df_big['LINK_SENTIMENT'] < 0]
         df_big['LINK_SENTIMENT'] = df_big['LINK_SENTIMENT'] * -1
 
-    filtered_df = filter_year(int(year), filter_month(int(month), df_big))
 
 
     grouped = list(
-        filtered_df.groupby(direction)['LINK_SENTIMENT']
+        df_big.groupby(direction)['LINK_SENTIMENT']
                    .sum()
                    .sort_values()
                    .items()
@@ -127,7 +129,7 @@ def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5, min_count = 1000):
     top = grouped[:n]
     return [{
         "name" : ele[0],
-        "count" : round(ele[1],3)
+        "count" : round(ele[1]*100,1)
     } for ele in top]
 
 
@@ -186,6 +188,18 @@ def get_activity(df, subreddit):
         "pos_target": pos_target[i],
         "neg_target": neg_target[i],
     } for i in range(0,len(dates))]
+
+def sample_post(df, subreddit, sent):
+    filtered_df = df[df['SOURCE_SUBREDDIT'] == subreddit]
+    if sent == 'neg':
+        result = filtered_df[filtered_df['LINK_SENTIMENT'] == -1].sample(1)
+    else:
+        result = filtered_df[filtered_df['LINK_SENTIMENT'] == 1].sample(1)
+
+    if result.size == 0:
+        return "No samples found"
+    else:
+        return result
 
 if __name__ == '__main__':
 

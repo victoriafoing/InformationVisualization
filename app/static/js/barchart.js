@@ -7,7 +7,7 @@ socket.on('connect', function () {
 /// Here goes the timeslider
 var margin = {top: 150, right:50, bottom:0, left:50},
     width = 700 - margin.left - margin.right,
-    height = 100 - margin.top - margin.bottom;
+    height = 150 - margin.top - margin.bottom;
 
 var svg = d3.select("#timeslider")
     .append("svg")
@@ -99,9 +99,9 @@ fetch(fetch_url)
         var svg = d3.select("#barchart"),
             margin = {top: 35, right: 40, bottom: 15, left: 125},
             width = +svg.attr("width") - margin.left - margin.right,
-            height = +svg.attr("height") - margin.top - margin.bottom;
+            height = +svg.attr("height") - margin.top - margin.bottom + 50 ;
 
-        var spread = 120;
+        var spread = 100;
         // Create svg
         /*var svg = d3.select("body").append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -170,7 +170,8 @@ fetch(fetch_url)
                         })
                         .then((data) => {
                             activity_timeline(data, d.name)
-                        })
+                        });
+
                 });
 
 
@@ -186,7 +187,9 @@ fetch(fetch_url)
                         })
                         .then((data) => {
                             activity_timeline(data, d.name)
-                        })
+                        });
+
+
                 });
             
 
