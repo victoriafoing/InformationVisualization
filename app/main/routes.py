@@ -34,7 +34,7 @@ def get_data_by_month_year(month, year):
 
 @main.route("/top/<year>/<month>", methods=['GET'])
 def get_top_subreddits_by_month_year(month, year):
-    data = get_top_5_both_sent(current_app.df, month, year, False)
+    data = get_top_5(current_app.df, month, year)
     print(data)
     return json.dumps(data)
 

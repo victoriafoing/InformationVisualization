@@ -21,8 +21,8 @@ var formatDateM = d3.timeFormat("%m %Y");
 var formatDate4bar = d3.timeFormat("/top/" + "%Y/ %m");
 var parseDate = d3.timeParse("%m/%y");
 
-var startDate = new Date("2015-01"),
-    endDate = new Date("2016-12");
+var startDate = new Date("2014-01"),
+    endDate = new Date("2017-01");
 var moving = false;
 var currentValue = 0;
 var targetValue = width;
@@ -115,13 +115,13 @@ fetch(fetch_url)
         function makeBars(data) {
             var xLeft = d3.scaleLinear()
                 .range([0, width / 2 - spread])
-                .domain([0, d3.max(data.hated, function (d) {
+                .domain([0, d3.max(data.source, function (d) {
                     return d.count;
                 })]);
 
             var xRight = d3.scaleLinear()
                 .range([0, width / 2 - spread])
-                .domain([0, d3.max(data.loved, function (d) {
+                .domain([0, d3.max(data.target, function (d) {
                     return d.count;
                 })]);
 
@@ -129,14 +129,14 @@ fetch(fetch_url)
             var yLeft = d3.scaleBand()
                 .rangeRound([height, 0])
                 .padding(0.1)
-                .domain(data.hated.map(function (d) {
+                .domain(data.source.map(function (d) {
                     return d.name;
                 }));
 
             var yRight = d3.scaleBand()
                 .rangeRound([height, 0])
                 .padding(0.1)
-                .domain(data.loved.map(function (d) {
+                .domain(data.target.map(function (d) {
                     return d.name;
                 }));
 
@@ -159,7 +159,7 @@ fetch(fetch_url)
                 .call(yAxisRight);
                 
             barsLeft = svg.selectAll(".bar")
-                .data(data.hated)
+                .data(data.source)
                 .enter()
                 .append("g")
                 .on("click", function(d){
@@ -176,7 +176,7 @@ fetch(fetch_url)
 
 
             barsRight = svg.selectAll(".bargood")
-                .data(data.loved)
+                .data(data.target)
                 .enter()
                 .append("g")
                 .on("click", function(d){
@@ -279,7 +279,7 @@ fetch(fetch_url)
   
     function step() {
         update(x.invert(currentValue));
-        currentValue = currentValue + (targetValue/24);
+        currentValue = currentValue + (targetValue/36);
         if (currentValue > targetValue) {
           moving = false;
           currentValue = 0;

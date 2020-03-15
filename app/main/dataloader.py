@@ -94,43 +94,42 @@ def get_top_5_both_sent(df, month, year, is_tar: bool, n=5, min_count = 25):
         "hated" : bad
     }
 
-def get_top_5(df, month, year, sent: bool, is_tar: bool, n=5, min_count = 100):
-    '''
-    :param sent: True for positive, False for negative sentiment
-    :param is_tar:
-    '''
-
-    filtered_df = filter_year(int(year), filter_month(int(month), df))
-
-    if is_tar:
-        direction = 'TARGET_SUBREDDIT'
-    else:
-        direction = 'SOURCE_SUBREDDIT'
+def get_top_5(df, month, year, n=5, min_count = 1000):
 
     # Filter subreddits that dont appear often
-    v = filtered_df[direction].value_counts()
-    df_big = filtered_df[filtered_df[direction].isin(v.index[v.gt(min_count)])]
+    f = df['TARGET_SUBREDDIT'].value_counts()
+    df_tar = df[df['TARGET_SUBREDDIT'].isin(f.index[f.gt(min_count)])]
+    w = df['SOURCE_SUBREDDIT'].value_counts()
+    df_src = df[df['SOURCE_SUBREDDIT'].isin(w.index[w.gt(min_count)])]
+ 
+    df_tar = df_tar[df_tar['LINK_SENTIMENT'] < 0]
+    df_tar['LINK_SENTIMENT'] = df_tar['LINK_SENTIMENT'] * -1
 
-    if sent:
-        df_big = df_big[df_big['LINK_SENTIMENT'] > 0]
-    else:
-        df_big = df_big[df_big['LINK_SENTIMENT'] < 0]
-        df_big['LINK_SENTIMENT'] = df_big['LINK_SENTIMENT'] * -1
+    df_src = df_src[df_src['LINK_SENTIMENT'] < 0]
+    df_src['LINK_SENTIMENT'] = df_src['LINK_SENTIMENT'] * -1
 
+    filtered_src = filter_year(int(year), filter_month(int(month), df_src))
+    filtered_tar = filter_year(int(year), filter_month(int(month), df_tar))
 
-
-    grouped = list(
-        df_big.groupby(direction)['LINK_SENTIMENT']
-                   .sum()
-                   .sort_values()
-                   .items()
-    )
-    grouped = sorted(list(map(lambda x: (x[0],x[1]/v[x[0]]),grouped)),key= lambda tup: tup[1], reverse=True)
-    top = grouped[:n]
-    return [{
-        "name" : ele[0],
-        "count" : round(ele[1]*100,1)
-    } for ele in top]
+    def make_the_json(df_in, n, v, direction: str):
+        grouped = list(
+            df_in.groupby(direction)['LINK_SENTIMENT']
+                    .sum()
+                    .sort_values()
+                    .items()
+        )
+        grouped = sorted(list(map(lambda x: (x[0],x[1]/v[x[0]]),grouped)),key= lambda tup: tup[1], reverse=True)
+        top = grouped[:n]
+        return [{
+            "name" : ele[0],
+            "count" : round(ele[1],3)
+                } for ele in top]
+    
+    return {
+        "source" : make_the_json(filtered_src, n, w, 'SOURCE_SUBREDDIT'),
+        "target" : make_the_json(filtered_tar, n, f, 'TARGET_SUBREDDIT')
+    } 
+    
 
 
 def get_most_hated_loved_subreddits_by_month_year(df, month, year):
