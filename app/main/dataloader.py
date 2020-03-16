@@ -1,5 +1,5 @@
 import pandas as pd
-
+import requests
 
 def load_csv(file: str):
     ext = file[-3:]
@@ -188,17 +188,44 @@ def get_activity(df, subreddit):
         "neg_target": neg_target[i],
     } for i in range(0,len(dates))]
 
-def sample_post(df, subreddit, sent):
-    filtered_df = df[df['SOURCE_SUBREDDIT'] == subreddit]
-    if sent == 'neg':
-        result = filtered_df[filtered_df['LINK_SENTIMENT'] == -1].sample(1)
-    else:
-        result = filtered_df[filtered_df['LINK_SENTIMENT'] == 1].sample(1)
+def sample_post(df, subreddit, month, year, dir):
 
+    # Filter table by direction of hyperlinks
+    if dir == '_source':
+        filtered_df = df[df['SOURCE_SUBREDDIT'] == subreddit]
+    elif dir == '_target':
+        filtered_df = df[df['TARGET_SUBREDDIT'] == subreddit]
+
+    # Add time categories for grouping
+    filtered_df["Date"] = filtered_df["TIMESTAMP"].astype(str).str.split(expand=True)[0]
+    filtered_df['Year-Month'] = filtered_df["Date"].str[:7]
+
+    # Filter table by date
+    if len(month) == 1:
+        month = "0" + str(month)
+    year_month = str(year) + "-" + str(month)
+    result = filtered_df[filtered_df['Year-Month'] == year_month][['Year-Month','LINK_SENTIMENT','SOURCE_SUBREDDIT','TARGET_SUBREDDIT','POST_ID']]
+
+    # Return subreddit and post info
     if result.size == 0:
         return "No samples found"
     else:
-        return result
+        row = result.sample(1)
+        print(row)
+
+        source = row.iloc[0]['SOURCE_SUBREDDIT']
+        post_id = row.iloc[0]['POST_ID'][0:6]
+        url = "http://reddit.com/r/"+source+"/comments/"+post_id+"/"
+        print(url)
+
+        return {
+           'date': row.iloc[0]['Year-Month'],
+           # 'sent': row.iloc[0]['LINK_SENTIMENT'],
+           'source': source,
+           'target': row.iloc[0]['TARGET_SUBREDDIT'],
+           'post_id': post_id,
+           'url': url,
+        };
 
 if __name__ == '__main__':
 

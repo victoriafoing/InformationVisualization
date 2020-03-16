@@ -65,7 +65,8 @@ def test(url):
                             'User-agent': 'Reddit Visualization Project'
                         }).text
 
-@main.route("/sample/<subreddit>/<sent>", methods=['GET'])
-def get_sample(subreddit, sent):
-    data = sample_post(current_app.df, subreddit, sent)
+@main.route("/sample/<subreddit>/<month>/<year>/<dir>", methods=['GET'])
+def get_sample(subreddit, month, year, dir):
+    data = sample_post(current_app.df, subreddit, month, year, dir)
+    print(data)
     return json.dumps(data)

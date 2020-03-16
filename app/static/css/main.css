@@ -65,4 +65,6 @@ body {
   width: 65%;
   margin: auto;
   border-radius: 5px;
+  overflow-y: scroll;
+  height: 400px;
 }

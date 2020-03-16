@@ -132,11 +132,11 @@ function activity_timeline(data, subreddit) {
             .attr("y",margin.top)
         title.text(function(d) { return d; });
 
-		tooltip(filtered);
+		tooltip(filtered, input);
 
 	}
 
-	function tooltip(filtered) {
+	function tooltip(filtered, input) {
 
 		var labels = focus.selectAll(".lineHoverText")
 			.data(filtered)
@@ -161,7 +161,29 @@ function activity_timeline(data, subreddit) {
 		svg.selectAll(".overlay")
 			.on("mouseover", function() { focus.style("display", null); })
 			.on("mouseout", function() { focus.style("display", "none"); })
-			.on("mousemove", mousemove);
+			.on("mousemove", mousemove)
+			.on("click", click_event);
+
+        function click_event() {
+
+			var x0 = x.invert(d3.mouse(this)[0]),
+				i = bisectDate(data, x0, 1),
+				d0 = data[i - 1],
+				d1 = data[i],
+				d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+
+			var month = d.date.getMonth()+1
+			var year = d.date.getUTCFullYear()
+            var fetch_url = '/sample/'+subreddit + '/' + month + '/' + year + '/'+input;
+                    fetch(fetch_url)
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            sample_post(data)
+                        });
+
+        }
 
 		function mousemove() {
 
