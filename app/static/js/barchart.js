@@ -6,7 +6,7 @@ socket.on('connect', function () {
 
 /// Here goes the timeslider
 var margin = {top: 150, right:50, bottom:0, left:50},
-    width = 700 - margin.left - margin.right,
+    width = 1000 - margin.left - margin.right,
     height = 150 - margin.top - margin.bottom;
 
 var svg = d3.select("#timeslider")

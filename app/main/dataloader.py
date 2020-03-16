@@ -94,13 +94,15 @@ def get_top_5_both_sent(df, month, year, is_tar: bool, n=5, min_count = 25):
         "hated" : bad
     }
 
-def get_top_5(df, month, year, n=5, min_count = 1000):
+def get_top_5(df, month, year, n=5, min_count = 20):
+
+    df_filt = filter_year(int(year), filter_month(int(month), df))
 
     # Filter subreddits that dont appear often
-    f = df['TARGET_SUBREDDIT'].value_counts()
-    df_tar = df[df['TARGET_SUBREDDIT'].isin(f.index[f.gt(min_count)])]
-    w = df['SOURCE_SUBREDDIT'].value_counts()
-    df_src = df[df['SOURCE_SUBREDDIT'].isin(w.index[w.gt(min_count)])]
+    f = df_filt['TARGET_SUBREDDIT'].value_counts()
+    df_tar = df_filt[df_filt['TARGET_SUBREDDIT'].isin(f.index[f.gt(min_count)])]
+    w = df_filt['SOURCE_SUBREDDIT'].value_counts()
+    df_src = df_filt[df_filt['SOURCE_SUBREDDIT'].isin(w.index[w.gt(min_count)])]
  
     df_tar = df_tar[df_tar['LINK_SENTIMENT'] < 0]
     df_tar['LINK_SENTIMENT'] = df_tar['LINK_SENTIMENT'] * -1
@@ -108,8 +110,6 @@ def get_top_5(df, month, year, n=5, min_count = 1000):
     df_src = df_src[df_src['LINK_SENTIMENT'] < 0]
     df_src['LINK_SENTIMENT'] = df_src['LINK_SENTIMENT'] * -1
 
-    filtered_src = filter_year(int(year), filter_month(int(month), df_src))
-    filtered_tar = filter_year(int(year), filter_month(int(month), df_tar))
 
     def make_the_json(df_in, n, v, direction: str):
         grouped = list(
@@ -122,12 +122,12 @@ def get_top_5(df, month, year, n=5, min_count = 1000):
         top = grouped[:n]
         return [{
             "name" : ele[0],
-            "count" : round(ele[1],3)
+            "count" : round(ele[1]*100,1)
                 } for ele in top]
     
     return {
-        "source" : make_the_json(filtered_src, n, w, 'SOURCE_SUBREDDIT'),
-        "target" : make_the_json(filtered_tar, n, f, 'TARGET_SUBREDDIT')
+        "source" : make_the_json(df_src, n, w, 'SOURCE_SUBREDDIT'),
+        "target" : make_the_json(df_tar, n, f, 'TARGET_SUBREDDIT')
     } 
     
 
