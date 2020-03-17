@@ -173,7 +173,7 @@ function activity_timeline(data, subreddit) {
 				d = x0 - d0.date > d1.date - x0 ? d1 : d0;
 
 			var month = d.date.getMonth()+1
-			var year = d.date.getUTCFullYear()
+			var year = d.date.getFullYear()
             var fetch_url = '/sample/'+subreddit + '/' + month + '/' + year + '/'+input;
                     fetch(fetch_url)
                         .then(function (response) {
