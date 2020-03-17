@@ -211,26 +211,23 @@ def sample_post(df, subreddit, month, year, dir):
     if len(month) == 1:
         month = "0" + str(month)
     year_month = str(year) + "-" + str(month)
-    result = filtered_df[filtered_df['Year-Month'] == year_month][['Year-Month','LINK_SENTIMENT','SOURCE_SUBREDDIT','TARGET_SUBREDDIT','POST_ID']]
+    result = filtered_df[filtered_df['Year-Month'] == year_month][['Date','Year-Month','LINK_SENTIMENT','SOURCE_SUBREDDIT','TARGET_SUBREDDIT','POST_ID']]
 
     # Return subreddit and post info
     if result.size == 0:
-        return "No samples found"
+        return []
     else:
-        row = result.sample(1)
+        print("samples:",min(result.size-1,5))
+        samples = result.sample(min(result.size-1,5))
 
-        source = row.iloc[0]['SOURCE_SUBREDDIT']
-        post_id = row.iloc[0]['POST_ID'][0:6]
-        url = "http://reddit.com/r/"+source+"/comments/"+post_id+"/"
-
-        return {
-           'date': row.iloc[0]['Year-Month'],
-           'sent': sent2str(row.iloc[0]['LINK_SENTIMENT']),
-           'source': source,
-           'target': row.iloc[0]['TARGET_SUBREDDIT'],
-           'post_id': post_id,
-           'url': url,
-        };
+        return [{
+           'date': row['Date'],
+           'sent': sent2str(row['LINK_SENTIMENT']),
+           'source': row['SOURCE_SUBREDDIT'],
+           'target': row['TARGET_SUBREDDIT'],
+           'post_id': row['POST_ID'][0:6],
+           'url': "http://reddit.com/r/"+row['SOURCE_SUBREDDIT']+"/comments/"+row['POST_ID'][0:6]+"/",
+        } for i,row in samples.iterrows()];
 
 if __name__ == '__main__':
 
