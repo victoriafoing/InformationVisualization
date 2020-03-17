@@ -199,6 +199,13 @@ def sample_post(df, subreddit, month, year, dir):
     # Add time categories for grouping
     filtered_df["Date"] = filtered_df["TIMESTAMP"].astype(str).str.split(expand=True)[0]
     filtered_df['Year-Month'] = filtered_df["Date"].str[:7]
+    
+    # Sentiment function
+    def sent2str(sent):
+        if sent == -1:
+            return '-'
+        else:
+            return '+'
 
     # Filter table by date
     if len(month) == 1:
@@ -211,16 +218,14 @@ def sample_post(df, subreddit, month, year, dir):
         return "No samples found"
     else:
         row = result.sample(1)
-        print(row)
 
         source = row.iloc[0]['SOURCE_SUBREDDIT']
         post_id = row.iloc[0]['POST_ID'][0:6]
         url = "http://reddit.com/r/"+source+"/comments/"+post_id+"/"
-        print(url)
 
         return {
            'date': row.iloc[0]['Year-Month'],
-           # 'sent': row.iloc[0]['LINK_SENTIMENT'],
+           'sent': sent2str(row.iloc[0]['LINK_SENTIMENT']),
            'source': source,
            'target': row.iloc[0]['TARGET_SUBREDDIT'],
            'post_id': post_id,
