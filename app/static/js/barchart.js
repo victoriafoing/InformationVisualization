@@ -22,7 +22,7 @@ var formatDate4bar = d3.timeFormat("/top/" + "%Y/ %m");
 var parseDate = d3.timeParse("%m/%y");
 
 var startDate = new Date("2014-01"),
-    endDate = new Date("2017-01");
+    endDate = new Date("2017-04");
 var moving = false;
 var currentValue = 0;
 var targetValue = width;
@@ -279,7 +279,7 @@ fetch(fetch_url)
   
     function step() {
         update(x.invert(currentValue));
-        currentValue = currentValue + (targetValue/36);
+        currentValue = currentValue + (targetValue/39);
         if (currentValue > targetValue) {
           moving = false;
           currentValue = 0;
