@@ -218,7 +218,7 @@ def sample_post(df, subreddit, month, year, dir):
         return []
     else:
         print("samples:",min(result.size-1,5))
-        samples = result.sample(min(result.size-1,5))
+        samples = result.sample(min(result.size-1,5)).sort_values(by=['Date'])
 
         return [{
            'date': row['Date'],
