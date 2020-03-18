@@ -62,9 +62,31 @@ body {
 .comment {
   background-color: #E6E6FA;
   opacity: 0.75;
-  width: 65%;
+  width: 75%;
   margin: auto;
   border-radius: 5px;
   overflow-y: scroll;
   height: 500px;
+}
+
+#comment_box {
+    width: 900px;
+    height: 500px;
+    margin: auto;
+}
+
+.timeline {
+    margin: auto;
+}
+
+.view_title {
+    padding-top: 20px;
+}
+
+.tip {
+    padding-top: 20px;
+}
+
+.selections {
+    padding-bottom: 20px;
 }

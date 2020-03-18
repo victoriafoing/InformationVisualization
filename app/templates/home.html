@@ -13,10 +13,10 @@
     <!-- Slider and Barchart -->
     <div class="visualization-view" id="view-slider-barchart">
         <div style="clear: both">
-            <h2 style="float: left; width:50%;"> Attackers</h2>
-            <h2 style="float: right; width:50%;"> Victims</h2>
+            <h2 class="view_title" style="float: left; width:50%;"> Attackers</h2>
+            <h2 class="view_title" style="float: right; width:50%;"> Victims</h2>
         </div>
-        <hr />
+        <!--<hr />-->
         <div class="bar">
             <svg id="barchart" width="800" height="400"></svg>
         </div>
@@ -31,7 +31,7 @@
 
     <!-- Emmbeddings -->
     <div class="visualization-view" id="view-embeddings">
-        <h2> Subreddit embeddings </h2>
+        <h2 class="view_title"> Subreddit embeddings </h2>
         <div id="embeddings"></div>
     </div>
 
@@ -50,11 +50,10 @@
 
     <!-- Activity timeline -->
     <div class="visualization-view" id="view-activity">
-        <h2> Activity Timeline </h2>
-        <h4 class="tip"> Click in one of the bars above to view a subreddit's timeline </h4>
+            <h2 class="view_title"> Activity Timeline </h2>
+            <span class="tip"> Click on one of the bars above to view a subreddit's timeline </span>
         <div class="timeline">
-            <svg id="activity" width="800" height="400"></svg>
-        </div>
+            <svg id="activity" width="900" height="500"></svg>
         <div class="selections">
             <font>Direction of Hyperlinks: </font>
             <select id="selectbox">
@@ -62,15 +61,16 @@
                 <option value="_target">Incoming</option>
             </select>
         </div>
+        </div>
     </div>
 
     <link rel="stylesheet" type="text/css" href="../static/css/activity.css">
 
     <!-- Comments -->
     <div class="visualization-view" id="view-comments">
-        <h2> Sample post </h2>
+            <h2 class="view_title"> Sampled posts </h2>
+            <span class="tip"> Click somewhere in the timeline to the left to see sample posts from that month </span>
         <div id="comment_box">
-            <h4 class="tip" style="text-align:center; height:50%;"> Click somewhere in the timeline to the left to see a sample post from that month </h4>
             <script type="text/javascript" src="../static/js/postsample.js"></script>
         </div>
     </div>
