@@ -101,22 +101,22 @@ const draw_embeddings = async (width, height) => {
 
     svg.call(
         d3.zoom()
-        .extent([
-            [0, 0],
-            [width, height]
-        ])
-        .translateExtent([
-            [0, 0],
-            [width, height]
-        ])
-        .scaleExtent([1, max_zoom])
-        .on("zoom", zoomed)
+            .extent([
+                [0, 0],
+                [width, height]
+            ])
+            .translateExtent([
+                [0, 0],
+                [width, height]
+            ])
+            .scaleExtent([1, max_zoom])
+            .on("zoom", zoomed)
     );
 };
 
-// const select_node = (subreddit_id) => {
-//     console.log(d3.selectAll('.embedding-node'));
-// };
+const select_node = (subreddit_id) => {
+    console.log(d3.selectAll('.embedding-node'));
+};
 
 
 draw_embeddings(1000, 600);
