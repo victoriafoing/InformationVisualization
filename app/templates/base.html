@@ -28,9 +28,10 @@
             text-justify: inter-word;
         }
 
-        /*.bar:hover {
-            fill: brown;
-        }*/
+        <!--.bar:hover {-->
+            <!--opacity: 1.0;-->
+            <!--cursor: pointer;-->
+        <!--}-->
 
         .axis {
             font: 10px sans-serif;
@@ -57,16 +58,23 @@
         }
 
         body {
-            /*font-family: "Arial", sans-serif;*/
             position: relative;
         }
 
         .bar {
             fill: #bd2130;
+            opacity: 0.75;
+            cursor: pointer;
         }
 
         .bargood {
             fill: #0c5460;
+            opacity: 0.75;
+            cursor: pointer;
+        }
+
+        .bar:hover, .bargood:hover {
+            opacity: 1.0;
         }
 
         .axis {

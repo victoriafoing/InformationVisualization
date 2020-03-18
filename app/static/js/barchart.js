@@ -38,7 +38,7 @@ var slider = svg.append("g")
     .attr("class", "slider")
     .attr("transform", "translate(" + margin.left + "," + (height+margin.top/2) + ")");
 
-var fetch_url = '/top/2016/02';
+var fetch_url = '/top/2014/01';
 fetch(fetch_url) 
     .then(function (response) {
         return response.json();
