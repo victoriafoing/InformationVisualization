@@ -119,4 +119,4 @@ const draw_embeddings = async (width, height) => {
 // };
 
 
-draw_embeddings(600, 600);
+draw_embeddings(1000, 600);
