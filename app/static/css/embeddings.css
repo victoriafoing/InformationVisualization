@@ -1,5 +1,5 @@
 :root {
-    --redit-color: #FF4500;
+    --redit-color: #ff4500;
     --transition-duration: 300ms;
 }
 
@@ -30,6 +30,10 @@
 
 #embeddings {
     text-align: center;
+}
+
+#embeddings svg {
+    cursor: grab;
 }
 
 .embedding-node {
