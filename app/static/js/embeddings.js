@@ -1,4 +1,4 @@
-async function draw_embeddings(width, height) {
+const draw_embeddings = async (width, height) => {
     // Fetching embeddings
     const embeddings = await (await fetch("/embeddings")).json();
 
@@ -53,13 +53,29 @@ async function draw_embeddings(width, height) {
         .on("mouseover", show_tooltip)
         .on("mouseout", hide_tooltip);
 
+    // const label_array = [];
+    // const anchor_array = [];
+
+    // embeddings.forEach(d => {
+    //     label_item = {
+    //         name: 'r/' + d[0],
+    //         x: x(d[1]),
+    //         y: y(d[1])
+    //     }
+    //     anchor_item = {
+    //         x: x(d[1]),
+    //         y: y(d[1]),
+    //         r: circle_radius
+    //     }
+    //     // console.log(label_item);
+    // });
 
     // Zoom behaviour
     const scale_attenuation = 5;
     const max_zoom = 8;
     const label_zoom_treshold = 2.5;
 
-    const zoomed = function () {
+    const zoomed = () => {
         const transform = d3.event.transform;
         const tx = transform.x;
         const ty = transform.y;
@@ -68,8 +84,8 @@ async function draw_embeddings(width, height) {
         // Labels
         if (k > label_zoom_treshold) {
             const label_opacity = Math.min(2 * (k - label_zoom_treshold) / (max_zoom - label_zoom_treshold) * 100, 100);
-            labels.attr("x", d => k * x(d[1]) + tx)
-                .attr("y", d => k * y(d[2]) + ty)
+            labels.attr("x", d => k * x(d[1]) + tx - 4 * d[0].length)
+                .attr("y", d => k * y(d[2]) + ty - 20)
                 .style("opacity", label_opacity + '%')
                 .text(d => d[0]);
         } else {
@@ -81,7 +97,7 @@ async function draw_embeddings(width, height) {
         circles.attr("cx", d => k * x(d[1]) + tx)
             .attr("cy", d => k * y(d[2]) + ty)
             .attr("r", new_r);
-    }
+    };
 
     svg.call(
         d3.zoom()
@@ -96,7 +112,11 @@ async function draw_embeddings(width, height) {
         .scaleExtent([1, max_zoom])
         .on("zoom", zoomed)
     );
-}
+};
+
+// const select_node = (subreddit_id) => {
+//     console.log(d3.selectAll('.embedding-node'));
+// };
 
 
 draw_embeddings(600, 600);
