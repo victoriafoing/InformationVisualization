@@ -36,10 +36,6 @@
     text-align: center;
 }
 
-#embeddings svg {
-    cursor: grab;
-}
-
 .embedding-node {
     fill: var(--redit-color);
     fill-opacity: 33%;

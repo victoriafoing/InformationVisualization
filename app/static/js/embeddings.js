@@ -75,6 +75,14 @@ const draw_embeddings = async (width, height) => {
     const max_zoom = 8;
     const label_zoom_treshold = 2.5;
 
+    const before_zoom = () => {
+        svg.style("cursor", "grabbing");
+    };
+
+    const after_zoom = () => {
+        svg.style("cursor", "grab");
+    };
+
     const zoomed = () => {
         const transform = d3.event.transform;
         const tx = transform.x;
@@ -110,13 +118,15 @@ const draw_embeddings = async (width, height) => {
                 [width, height]
             ])
             .scaleExtent([1, max_zoom])
+            .on("start", before_zoom)
             .on("zoom", zoomed)
+            .on("end", after_zoom)
     );
 };
 
-const select_node = (subreddit_id) => {
-    console.log(d3.selectAll('.embedding-node'));
-};
+// const select_node = (subreddit_id) => {
+//     console.log(d3.selectAll('.embedding-node'));
+// };
 
 
 draw_embeddings(1000, 600);
