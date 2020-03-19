@@ -211,22 +211,41 @@ def sample_post(df, subreddit, month, year, dir):
     if len(month) == 1:
         month = "0" + str(month)
     year_month = str(year) + "-" + str(month)
-    result = filtered_df[filtered_df['Year-Month'] == year_month][['Date','Year-Month','LINK_SENTIMENT','SOURCE_SUBREDDIT','TARGET_SUBREDDIT','POST_ID']]
+
+    pos = filtered_df[filtered_df['LINK_SENTIMENT']==1]
+    neg = filtered_df[filtered_df['LINK_SENTIMENT']==-1]
+
+    pos_result = pos[pos['Year-Month'] == year_month][['Date','Year-Month','LINK_SENTIMENT','SOURCE_SUBREDDIT','TARGET_SUBREDDIT','POST_ID']]
+    neg_result = neg[neg['Year-Month'] == year_month][['Date','Year-Month','LINK_SENTIMENT','SOURCE_SUBREDDIT','TARGET_SUBREDDIT','POST_ID']]
+
+    result = {'pos': [], 'neg': []}
+
+    if pos_result.size != 0:
+        samples = pos_result.sample(1)
+        for i,row in samples.iterrows():
+            result['pos'].append({
+                'date': row['Date'],
+                'sent': sent2str(row['LINK_SENTIMENT']),
+                'source': row['SOURCE_SUBREDDIT'],
+                'target': row['TARGET_SUBREDDIT'],
+                'post_id': row['POST_ID'][0:6],
+                'url': "http://reddit.com/r/" + row['SOURCE_SUBREDDIT'] + "/comments/" + row['POST_ID'][0:6] + "/",
+            })
 
     # Return subreddit and post info
-    if result.size == 0:
-        return []
-    else:
-        samples = result.sample(min(len(result),5)).sort_values(by=['Date'])
+    if neg_result.size != 0:
+        samples = neg_result.sample(1)
+        for i,row in samples.iterrows():
+            result['neg'].append({
+                'date': row['Date'],
+                'sent': sent2str(row['LINK_SENTIMENT']),
+                'source': row['SOURCE_SUBREDDIT'],
+                'target': row['TARGET_SUBREDDIT'],
+                'post_id': row['POST_ID'][0:6],
+                'url': "http://reddit.com/r/" + row['SOURCE_SUBREDDIT'] + "/comments/" + row['POST_ID'][0:6] + "/",
+            })
 
-        return [{
-           'date': row['Date'],
-           'sent': sent2str(row['LINK_SENTIMENT']),
-           'source': row['SOURCE_SUBREDDIT'],
-           'target': row['TARGET_SUBREDDIT'],
-           'post_id': row['POST_ID'][0:6],
-           'url': "http://reddit.com/r/"+row['SOURCE_SUBREDDIT']+"/comments/"+row['POST_ID'][0:6]+"/",
-        } for i,row in samples.iterrows()];
+    return result
 
 if __name__ == '__main__':
 
