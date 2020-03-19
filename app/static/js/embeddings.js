@@ -1,3 +1,5 @@
+const embeddings_handle = {};
+
 const draw_embeddings = async (width, height) => {
     // Fetching embeddings
     const embeddings = await (await fetch("/embeddings")).json();
@@ -39,6 +41,7 @@ const draw_embeddings = async (width, height) => {
         .attr("y", d => y(d[2]))
         .text(d => d[0]);
 
+
     // Add nodes
     const circle_radius = 6;
 
@@ -53,22 +56,6 @@ const draw_embeddings = async (width, height) => {
         .on("mouseover", show_tooltip)
         .on("mouseout", hide_tooltip);
 
-    // const label_array = [];
-    // const anchor_array = [];
-
-    // embeddings.forEach(d => {
-    //     label_item = {
-    //         name: 'r/' + d[0],
-    //         x: x(d[1]),
-    //         y: y(d[1])
-    //     }
-    //     anchor_item = {
-    //         x: x(d[1]),
-    //         y: y(d[1]),
-    //         r: circle_radius
-    //     }
-    //     // console.log(label_item);
-    // });
 
     // Zoom behaviour
     const scale_attenuation = 5;
@@ -107,26 +94,72 @@ const draw_embeddings = async (width, height) => {
             .attr("r", new_r);
     };
 
-    svg.call(
-        d3.zoom()
-            .extent([
-                [0, 0],
-                [width, height]
-            ])
-            .translateExtent([
-                [0, 0],
-                [width, height]
-            ])
-            .scaleExtent([1, max_zoom])
-            .on("start", before_zoom)
-            .on("zoom", zoomed)
-            .on("end", after_zoom)
-    );
+    const zoom = d3.zoom()
+        .extent([
+            [0, 0],
+            [width, height]
+        ])
+        .translateExtent([
+            [0, 0],
+            [width, height]
+        ])
+        .scaleExtent([1, max_zoom])
+        .on("start", before_zoom)
+        .on("zoom", zoomed)
+        .on("end", after_zoom);
+
+    svg.call(zoom);
+
+    // Handle
+    embeddings_handle.select_node = subreddit_id => {
+        const selection_zoom = 6;
+
+        // Select node
+        let found = false;
+        const node = circles.filter(d => {
+            if (d[0] === subreddit_id) {
+                found = true;
+                return true;
+            }
+            return false;
+        });
+        if (!found) {
+            return;
+        }
+
+        // Update transform
+        const node_data = node.data()[0];
+        const node_x = selection_zoom * x(node_data[1]);
+        const node_y = selection_zoom * y(node_data[2]);
+
+        const translate_x = (width / 2 - node_x) / selection_zoom;
+        const translate_y = (height / 2 - node_y) / selection_zoom;
+
+        const new_transform = d3.zoomIdentity
+            .scale(selection_zoom)
+            .translate(translate_x, translate_y);
+
+        svg.transition().duration(1000).call(zoom.transform, new_transform);
+    };
 };
 
-// const select_node = (subreddit_id) => {
-//     console.log(d3.selectAll('.embedding-node'));
-// };
-
-
 draw_embeddings(1000, 600);
+
+
+// Force-based labelling
+// const label_array = [];
+// const anchor_array = [];
+
+// embeddings.forEach(d => {
+//     label_item = {
+//         name: 'r/' + d[0],
+//         x: x(d[1]),
+//         y: y(d[1])
+//     }
+//     anchor_item = {
+//         x: x(d[1]),
+//         y: y(d[1]),
+//         r: circle_radius
+//     }
+//     // console.log(label_item);
+// });
