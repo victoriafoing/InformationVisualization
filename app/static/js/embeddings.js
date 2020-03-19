@@ -51,7 +51,18 @@ const draw_embeddings = async (width, height) => {
         .attr("cy", d => y(d[2]))
         .attr("r", circle_radius)
         .on("mouseover", show_tooltip)
-        .on("mouseout", hide_tooltip);
+        .on("mouseout", hide_tooltip)
+        .on("click", function(d){
+            var fetch_url = '/activity/'+d[0];
+            fetch(fetch_url)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then((data) => {
+                    activity_timeline(data, d[0])
+                });
+
+        });
 
     // const label_array = [];
     // const anchor_array = [];
