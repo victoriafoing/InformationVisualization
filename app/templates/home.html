@@ -67,10 +67,17 @@
 
     <!-- Comments -->
     <div class="visualization-view" id="view-comments">
-            <h2 class="view_title"> Sampled posts </h2>
-            <span class="tip"> Click somewhere in the timeline to the left to see sample posts from that month </span>
+            <h2 class="view_title"> Sampled post </h2>
+            <span class="tip"> Click somewhere in the timeline to the left to see a sampled post from that month </span>
         <div id="comment_box">
             <script type="text/javascript" src="../static/js/postsample.js"></script>
+        </div>
+        <div class="selections">
+            <font>Sentiment of Post: </font>
+            <select id="select_sent">
+                <option value="pos">+</option>
+                <option value="neg">-</option>
+            </select>
         </div>
     </div>
 
