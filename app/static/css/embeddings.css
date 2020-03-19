@@ -45,6 +45,7 @@
 .embedding-node:hover {
     fill-opacity: 100%;
     transition: fill-opacity var(--transition-duration);
+    cursor: pointer;
 }
 
 .embedding-label {
