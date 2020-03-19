@@ -11,7 +11,7 @@ body {
 #visualization-grid {
   width: 95%;
   margin: auto;
-
+  
   display: grid;
   grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr 1fr;
@@ -60,7 +60,7 @@ body {
 }
 
 .comment {
-  background-color: #E6E6FA;
+  background-color: rgb(196, 196, 196);
   opacity: 0.75;
   width: 75%;
   margin: auto;

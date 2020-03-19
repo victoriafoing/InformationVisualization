@@ -4,10 +4,10 @@ body {
 }
 
 #play-button {
-    background: #f08080;
+    background: rgb(161, 33, 33);
     border-radius: 3px;
     border: none;
-    color: white;
+    color: rgba(255, 255, 255, 0.658);
     width: 10%;
     cursor: pointer;
     height: 30px;
@@ -25,7 +25,7 @@ body {
 }
 
 #play-button:hover {
-    background-color: #696969;
+    background-color: rgba(161, 33, 33, 0.459);
 }
 
 .ticks {
@@ -46,7 +46,7 @@ body {
 }
 
 .track-inset {
-    stroke: #dcdcdc;
+    stroke: #696969;
     stroke-width: 8px;
 }
 
@@ -58,7 +58,7 @@ body {
 }
 
 .handle {
-    fill: #fff;
+    fill: rgba(255, 255, 255, 0.404);
     stroke: #000;
     stroke-opacity: 0.5;
     stroke-width: 1.25px;
