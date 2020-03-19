@@ -54,7 +54,7 @@ const draw_embeddings = async (width, height) => {
         .attr("cy", d => y(d[2]))
         .attr("r", circle_radius)
         .on("mouseover", show_tooltip)
-        .on("mouseout", hide_tooltip)
+        .on("mouseout", hide_tooltip);
 
     // Timeline selection
     const draw_timeline = async d => {

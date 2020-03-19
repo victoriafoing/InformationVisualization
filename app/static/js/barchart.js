@@ -1,9 +1,3 @@
-var socket = io.connect('http://' + document.domain + ':' + location.port);
-// verify our websocket connection is established
-socket.on('connect', function () {
-    console.log('Websocket connected!');
-});
-
 /// Here goes the timeslider
 var margin = {top: 150, right:50, bottom:0, left:50},
     width = 1000 - margin.left - margin.right,
@@ -163,6 +157,8 @@ fetch(fetch_url)
                 .enter()
                 .append("g")
                 .on("click", function(d){
+                    embeddings_handle.select_node(d.name);
+                    
                     var fetch_url = '/activity/'+d.name;
                     fetch(fetch_url)
                         .then(function (response) {
@@ -180,6 +176,8 @@ fetch(fetch_url)
                 .enter()
                 .append("g")
                 .on("click", function(d){
+                    embeddings_handle.select_node(d.name);
+
                     var fetch_url = '/activity/'+d.name;
                     fetch(fetch_url)
                         .then(function (response) {
