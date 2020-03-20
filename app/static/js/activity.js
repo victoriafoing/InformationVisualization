@@ -19,6 +19,8 @@ function activity_timeline(data, subreddit) {
 		width = +svg.attr("width") - margin.left - margin.right,
 		height = +svg.attr("height") - margin.top - margin.bottom;
 
+    svg.selectAll("*").remove();
+    
     // Define X-axis
 	var x = d3.scaleTime()
 		.range([margin.left, width - margin.right])
